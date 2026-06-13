@@ -185,10 +185,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:-apple-sy
 </div><!-- /main -->
 
 <div class="bottomnav">
-  <button class="nvi active" onclick="showScreen('home',this)"><span class="nvi-ic">🏠</span><span class="nvi-lb">Уроки</span></button>
-  <button class="nvi" onclick="showScreen('lesson',this)" id="nav-lesson"><span class="nvi-ic">💬</span><span class="nvi-lb">Диалог</span></button>
-  <button class="nvi" onclick="showScreen('words',this)" id="nav-words"><span class="nvi-ic">📖</span><span class="nvi-lb">Слова</span></button>
-  <button class="nvi" onclick="showScreen('exercise',this)" id="nav-ex"><span class="nvi-ic">✏️</span><span class="nvi-lb">Задание</span></button>
+  <button class="nvi active" id="nav-home" onclick="showScreen('home',this)"><span class="nvi-ic">🏠</span><span class="nvi-lb">Уроки</span></button>
+  <button class="nvi" id="nav-lesson" onclick="navTo('lesson',this)"><span class="nvi-ic">💬</span><span class="nvi-lb">Диалог</span></button>
+  <button class="nvi" id="nav-words" onclick="navTo('words',this)"><span class="nvi-ic">📖</span><span class="nvi-lb">Слова</span></button>
+  <button class="nvi" id="nav-ex" onclick="navTo('exercise',this)"><span class="nvi-ic">✏️</span><span class="nvi-lb">Задание</span></button>
   <button class="nvi" onclick="showScreen('progress',this)"><span class="nvi-ic">📊</span><span class="nvi-lb">Прогресс</span></button>
 </div>
 
@@ -766,6 +766,10 @@ function init(){
   buildMenu();
   buildProgress();
   updateTopbar('Выберите урок');
+  currentLesson = LESSONS[0];
+  buildLessonContent();
+  buildWordsContent();
+  buildExercises();
 }
 
 function buildMenu(){
@@ -773,9 +777,9 @@ function buildMenu(){
   el.innerHTML = LESSONS.map((l,i)=>{
     const isDone = done.includes(l.id);
     const isCur = !isDone && (i===0 || done.includes(LESSONS[i-1]?.id));
-    const cls = isDone?'done':isCur?'current':'';
-    const ic = isDone?'✅':isCur?l.icon:'🔒';
-    return `<button class="lm-btn ${cls}" onclick="openLesson(${l.id})" ${!isDone&&!isCur&&i>0&&!done.includes(LESSONS[i-1]?.id)?'disabled':''}>
+    const cls = isDone ? 'done' : isCur ? 'current' : '';
+    const ic = isDone ? '✅' : l.icon;
+    return `<button class="lm-btn ${cls}" onclick="openLesson(${l.id})">
       <div class="lm-ic">${ic}</div>
       <div class="lm-num">Урок ${l.id} · ${l.level}</div>
       <div class="lm-name">${l.title}</div>
@@ -967,6 +971,11 @@ function markDone(id){
 }
 
 function updateTopbar(txt){document.getElementById('tsub').textContent=txt;}
+
+function navTo(screen,navEl){
+  if(!currentLesson){openLesson(1);return;}
+  showScreen(screen,navEl);
+}
 
 function esc(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;');}
 
