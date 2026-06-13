@@ -8,911 +8,971 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Čeština pro Světlanu</title>
 <style>
-:root {
-  --green: #1D9E75;
-  --green-dark: #0F6E56;
-  --green-light: #E1F5EE;
-  --purple: #7F77DD;
-  --purple-light: #EEEDFE;
-  --orange: #D85A30;
-  --orange-light: #FAECE7;
-  --amber: #EF9F27;
-  --bg: #F8F9FA;
-  --card: #FFFFFF;
-  --text: #1A1A1A;
-  --text2: #666;
-  --border: #E0E0E0;
-  --radius: 16px;
-  --radius-sm: 10px;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; overflow: hidden; background: var(--bg); font-family: -apple-system, 'Roboto', sans-serif; }
-
-/* STATUS BAR PLACEHOLDER */
-.statusbar { height: env(safe-area-inset-top, 0px); background: var(--green-dark); }
-
-/* TOP BAR */
-.topbar {
-  background: linear-gradient(135deg, var(--green), var(--green-dark));
-  padding: 14px 16px 14px;
-  display: flex; align-items: center; gap: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-}
-.topbar-flag { font-size: 28px; line-height: 1; }
-.topbar-info { flex: 1; }
-.topbar-title { font-size: 19px; font-weight: 700; color: white; letter-spacing: -0.3px; }
-.topbar-sub { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 1px; }
-.streak { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 6px 12px; font-size: 14px; font-weight: 600; color: white; }
-
-/* BOTTOM NAV */
-.bottomnav {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: white; border-top: 1px solid var(--border);
-  display: flex;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  z-index: 100;
-}
-.nav-item {
-  flex: 1; display: flex; flex-direction: column; align-items: center;
-  padding: 10px 4px 8px; cursor: pointer; transition: all 0.15s;
-  border: none; background: none;
-}
-.nav-icon { font-size: 22px; line-height: 1; }
-.nav-label { font-size: 11px; font-weight: 500; color: var(--text2); margin-top: 3px; }
-.nav-item.active .nav-label { color: var(--green); }
-.nav-item.active .nav-icon { transform: scale(1.15); }
-
-/* MAIN SCROLL AREA */
-.main {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
-  padding-top: calc(56px + env(safe-area-inset-top, 0px));
-}
-
-/* SCREENS */
-.screen { display: none; padding: 16px; }
-.screen.active { display: block; }
-
-/* CARDS */
-.card {
-  background: var(--card); border-radius: var(--radius);
-  border: 1px solid var(--border); padding: 16px; margin-bottom: 12px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-}
-.section-title {
-  font-size: 13px; font-weight: 600; color: var(--text2);
-  text-transform: uppercase; letter-spacing: 0.06em;
-  margin: 16px 0 10px;
-}
-
-/* PROGRESS BAR */
-.progress-wrap { background: #E8F5F1; border-radius: 6px; height: 8px; margin: 8px 0 14px; }
-.progress-fill { background: var(--green); height: 8px; border-radius: 6px; transition: width 0.5s ease; }
-
-/* DIALOG */
-.dialog-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
-.dtab {
-  flex: 1; padding: 10px; border-radius: var(--radius-sm); font-size: 14px;
-  font-weight: 600; border: 2px solid var(--border); background: white;
-  cursor: pointer; transition: all 0.2s; text-align: center; color: var(--text2);
-}
-.dtab.active { border-color: var(--green); background: var(--green-light); color: var(--green-dark); }
-.dtab.olga-tab.active { border-color: var(--purple); background: var(--purple-light); color: #3C3489; }
-
-/* AVATAR ROW */
-.avatar-row { display: flex; gap: 12px; margin-bottom: 14px; align-items: flex-start; }
-.ava {
-  width: 48px; height: 48px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 700; color: white;
-  flex-shrink: 0; cursor: pointer; user-select: none;
-}
-.ava-lucia { background: linear-gradient(135deg, #1D9E75, #0F6E56); }
-.ava-svetlana { background: linear-gradient(135deg, #D85A30, #993C1D); }
-.ava-olga { background: linear-gradient(135deg, #7F77DD, #534AB7); }
-
-.bubble {
-  flex: 1; background: white; border-radius: 0 14px 14px 14px;
-  border: 1px solid var(--border); padding: 12px 14px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-.bubble.lucia { border-top-left-radius: 4px; border-left: 3px solid var(--green); }
-.bubble.svetlana { border-top-left-radius: 4px; border-left: 3px solid var(--orange); }
-.bubble.olga { border-top-left-radius: 4px; border-left: 3px solid var(--purple); }
-
-.bubble-who { font-size: 11px; font-weight: 700; color: var(--text2); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
-.bubble-cz { font-size: 18px; font-weight: 600; color: var(--text); line-height: 1.4; }
-.bubble-ph { font-size: 13px; color: var(--green-dark); margin-top: 3px; font-style: italic; }
-.bubble-ru { font-size: 14px; color: var(--text2); margin-top: 4px; line-height: 1.4; }
-
-/* CONTROLS */
-.ctrl-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-.play-btn {
-  width: 44px; height: 44px; border-radius: 50%;
-  background: var(--green); border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; color: white; flex-shrink: 0;
-  transition: transform 0.1s, background 0.15s;
-  box-shadow: 0 2px 6px rgba(29,158,117,0.3);
-}
-.play-btn:active { transform: scale(0.93); background: var(--green-dark); }
-.play-btn.big { width: 56px; height: 56px; font-size: 22px; }
-.play-btn.playing { background: var(--green-dark); }
-
-.speed-pills { display: flex; gap: 5px; }
-.sp {
-  padding: 6px 11px; border-radius: 20px; font-size: 13px; font-weight: 600;
-  border: 1.5px solid var(--border); background: white; color: var(--text2);
-  cursor: pointer; transition: all 0.15s;
-}
-.sp.active { background: var(--green); color: white; border-color: var(--green); }
-
-.rec-btn {
-  display: flex; align-items: center; gap: 6px;
-  padding: 9px 16px; border-radius: 22px;
-  border: 1.5px solid var(--border); background: white;
-  font-size: 14px; font-weight: 600; color: var(--text2);
-  cursor: pointer; transition: all 0.2s;
-}
-.rec-btn.recording { background: var(--orange-light); border-color: var(--orange); color: var(--orange); }
-.rec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); animation: pulse 0.8s infinite; }
-@keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(0.7);opacity:0.5} }
-
-/* TIP BOX */
-.tip {
-  background: var(--green-light); border: 1px solid #9FE1CB;
-  border-radius: var(--radius-sm); padding: 12px 14px;
-  font-size: 14px; color: #085041; line-height: 1.5;
-  display: flex; gap: 10px; align-items: flex-start; margin-bottom: 14px;
-}
-.tip.purple { background: var(--purple-light); border-color: #AFA9EC; color: #3C3489; }
-.tip-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-
-/* WORDS */
-.words-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.word-card {
-  background: white; border: 1px solid var(--border); border-radius: var(--radius-sm);
-  padding: 14px 12px; cursor: pointer; transition: all 0.15s; text-align: left;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-.word-card:active { transform: scale(0.97); background: var(--green-light); border-color: var(--green); }
-.wc-cz { font-size: 16px; font-weight: 700; color: var(--text); }
-.wc-ru { font-size: 13px; color: var(--text2); margin-top: 3px; }
-.wc-ph { font-size: 12px; color: var(--green-dark); margin-top: 2px; font-style: italic; }
-.wc-icon { font-size: 20px; margin-bottom: 6px; }
-
-/* EXERCISE */
-.ex-question {
-  font-size: 17px; color: var(--text); line-height: 1.5;
-  font-weight: 500; margin-bottom: 16px;
-}
-.ex-highlight { background: #FFF3CD; border-radius: 6px; padding: 2px 8px; font-weight: 700; }
-.options { display: flex; flex-direction: column; gap: 10px; }
-.opt {
-  padding: 15px 16px; border-radius: var(--radius-sm);
-  border: 2px solid var(--border); background: white;
-  font-size: 16px; color: var(--text); text-align: left;
-  cursor: pointer; transition: all 0.15s; line-height: 1.4;
-}
-.opt:active { transform: scale(0.98); }
-.opt.correct { background: var(--green-light); border-color: var(--green); color: var(--green-dark); font-weight: 600; }
-.opt.wrong { background: var(--orange-light); border-color: var(--orange); color: #993C1D; }
-.opt:disabled { cursor: default; }
-
-.feedback {
-  margin-top: 12px; padding: 12px 14px; border-radius: var(--radius-sm);
-  font-size: 15px; font-weight: 600; line-height: 1.4; display: none;
-}
-.feedback.ok { background: var(--green-light); color: var(--green-dark); border: 1px solid var(--green); }
-.feedback.fail { background: var(--orange-light); color: #993C1D; border: 1px solid var(--orange); }
-
-/* LISTEN SCREEN */
-.listen-player {
-  background: #F0FAF6; border-radius: var(--radius); padding: 20px;
-  display: flex; flex-direction: column; align-items: center; gap: 14px;
-  border: 1px solid #9FE1CB; margin-bottom: 16px;
-}
-.waveform { display: flex; align-items: center; gap: 3px; height: 48px; }
-.wbar { width: 5px; background: var(--green); border-radius: 3px; height: 20%; transition: height 0.1s; }
-.listen-label { font-size: 14px; color: var(--text2); font-weight: 500; }
-
-/* PROGRESS SCREEN */
-.stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-.stat-card {
-  background: white; border-radius: var(--radius-sm); border: 1px solid var(--border);
-  padding: 14px 10px; text-align: center;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-.stat-num { font-size: 26px; font-weight: 700; color: var(--green); }
-.stat-num.purple { color: var(--purple); }
-.stat-num.amber { font-size: 22px; }
-.stat-lbl { font-size: 12px; color: var(--text2); margin-top: 3px; }
-
-.lesson-row {
-  display: flex; align-items: center; padding: 12px 0;
-  border-bottom: 1px solid var(--border); gap: 12px;
-}
-.lesson-row:last-child { border-bottom: none; }
-.lesson-icon { font-size: 22px; width: 36px; text-align: center; }
-.lesson-name { flex: 1; font-size: 15px; color: var(--text); font-weight: 500; }
-.lesson-badge {
-  padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;
-}
-.badge-done { background: var(--green-light); color: var(--green-dark); }
-.badge-now { background: #FFF3CD; color: #8B5A00; }
-.badge-lock { background: #F0F0F0; color: var(--text2); }
-
-.avatar-info-row { display: flex; gap: 12px; align-items: center; padding: 10px 0; }
-.ava-small { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: white; flex-shrink: 0; }
-.ava-name { font-size: 15px; font-weight: 600; color: var(--text); }
-.ava-desc { font-size: 13px; color: var(--text2); margin-top: 2px; }
-
-.screen-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-.screen-sub { font-size: 14px; color: var(--text2); margin-bottom: 14px; }
+:root{--green:#1D9E75;--gd:#0F6E56;--gl:#E1F5EE;--purple:#7F77DD;--pl:#EEEDFE;--orange:#D85A30;--ol:#FAECE7;--amber:#EF9F27;--bg:#F4F6F8;--card:#fff;--txt:#1A1A1A;--txt2:#666;--bdr:#E0E0E0;--r:16px;--rs:10px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--bg);font-family:-apple-system,'Roboto',sans-serif;font-size:16px}
+.topbar{background:linear-gradient(135deg,var(--green),var(--gd));padding:14px 16px;display:flex;align-items:center;gap:12px;position:fixed;top:0;left:0;right:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.topbar-flag{font-size:26px}
+.topbar-info{flex:1}
+.topbar-title{font-size:18px;font-weight:700;color:#fff}
+.topbar-sub{font-size:12px;color:rgba(255,255,255,.8);margin-top:1px}
+.streak{background:rgba(255,255,255,.2);border-radius:20px;padding:5px 11px;font-size:14px;font-weight:700;color:#fff}
+.bottomnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--bdr);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom,0)}
+.nvi{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 2px 7px;cursor:pointer;border:none;background:none;transition:all .15s}
+.nvi-ic{font-size:21px}
+.nvi-lb{font-size:10px;font-weight:600;color:var(--txt2);margin-top:2px}
+.nvi.active .nvi-lb{color:var(--green)}
+.nvi.active .nvi-ic{transform:scale(1.15)}
+.main{position:fixed;top:58px;left:0;right:0;bottom:62px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.screen{display:none;padding:14px}
+.screen.active{display:block}
+.card{background:var(--card);border-radius:var(--r);border:1px solid var(--bdr);padding:15px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.progress-wrap{background:#E8F5F1;border-radius:6px;height:8px;margin:8px 0 14px}
+.progress-fill{background:var(--green);height:8px;border-radius:6px;transition:width .5s}
+.dtabs{display:flex;gap:8px;margin-bottom:14px}
+.dtab{flex:1;padding:10px;border-radius:var(--rs);font-size:14px;font-weight:600;border:2px solid var(--bdr);background:#fff;cursor:pointer;text-align:center;color:var(--txt2);transition:all .2s}
+.dtab.active{border-color:var(--green);background:var(--gl);color:var(--gd)}
+.dtab.o.active{border-color:var(--purple);background:var(--pl);color:#3C3489}
+.arow{display:flex;gap:11px;margin-bottom:14px;align-items:flex-start}
+.ava{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#fff;flex-shrink:0;cursor:pointer}
+.al{background:linear-gradient(135deg,#1D9E75,#0F6E56)}
+.as{background:linear-gradient(135deg,#D85A30,#993C1D)}
+.ao{background:linear-gradient(135deg,#7F77DD,#534AB7)}
+.bbl{flex:1;background:#fff;border-radius:0 14px 14px 14px;border:1px solid var(--bdr);padding:11px 13px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.bbl.l{border-left:3px solid var(--green)}
+.bbl.s{border-left:3px solid var(--orange)}
+.bbl.o{border-left:3px solid var(--purple)}
+.bwho{font-size:11px;font-weight:700;color:var(--txt2);margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em}
+.bcz{font-size:17px;font-weight:600;color:var(--txt);line-height:1.4}
+.bph{font-size:13px;color:var(--gd);margin-top:3px;font-style:italic}
+.bru{font-size:14px;color:var(--txt2);margin-top:3px;line-height:1.4}
+.crow{display:flex;align-items:center;gap:8px;margin-top:9px;flex-wrap:wrap}
+.pb{width:42px;height:42px;border-radius:50%;background:var(--green);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;flex-shrink:0;transition:transform .1s,background .15s;box-shadow:0 2px 6px rgba(29,158,117,.3)}
+.pb:active{transform:scale(.92);background:var(--gd)}
+.pb.big{width:54px;height:54px;font-size:21px}
+.sps{display:flex;gap:4px}
+.sp{padding:5px 10px;border-radius:18px;font-size:12px;font-weight:700;border:1.5px solid var(--bdr);background:#fff;color:var(--txt2);cursor:pointer;transition:all .15s}
+.sp.active{background:var(--green);color:#fff;border-color:var(--green)}
+.rb{display:flex;align-items:center;gap:6px;padding:8px 15px;border-radius:22px;border:1.5px solid var(--bdr);background:#fff;font-size:14px;font-weight:600;color:var(--txt2);cursor:pointer;transition:all .2s}
+.rb.rec{background:var(--ol);border-color:var(--orange);color:var(--orange)}
+.rdot{width:8px;height:8px;border-radius:50%;background:var(--orange);animation:pulse .8s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.7);opacity:.5}}
+.tip{background:var(--gl);border:1px solid #9FE1CB;border-radius:var(--rs);padding:11px 13px;font-size:14px;color:#085041;line-height:1.5;display:flex;gap:9px;align-items:flex-start;margin-bottom:13px}
+.tip.p{background:var(--pl);border-color:#AFA9EC;color:#3C3489}
+.tip.a{background:#FFF8EC;border-color:#F5C842;color:#7A5200}
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wcard{background:#fff;border:1px solid var(--bdr);border-radius:var(--rs);padding:13px 12px;cursor:pointer;transition:all .15s;text-align:left;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.wcard:active{background:var(--gl);border-color:var(--green)}
+.wcz{font-size:15px;font-weight:700;color:var(--txt)}
+.wru{font-size:13px;color:var(--txt2);margin-top:2px}
+.wph{font-size:12px;color:var(--gd);margin-top:2px;font-style:italic}
+.wic{font-size:22px;margin-bottom:5px}
+.exq{font-size:17px;color:var(--txt);line-height:1.5;font-weight:500;margin-bottom:14px}
+.exhl{background:#FFF3CD;border-radius:5px;padding:1px 7px;font-weight:700}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{padding:14px 15px;border-radius:var(--rs);border:2px solid var(--bdr);background:#fff;font-size:16px;color:var(--txt);text-align:left;cursor:pointer;transition:all .15s;line-height:1.4}
+.opt:active{transform:scale(.98)}
+.opt.ok{background:var(--gl);border-color:var(--green);color:var(--gd);font-weight:600}
+.opt.no{background:var(--ol);border-color:var(--orange);color:#993C1D}
+.opt:disabled{cursor:default}
+.fb{margin-top:11px;padding:12px 14px;border-radius:var(--rs);font-size:15px;font-weight:600;line-height:1.4;display:none}
+.fb.ok{background:var(--gl);color:var(--gd);border:1px solid var(--green)}
+.fb.no{background:var(--ol);color:#993C1D;border:1px solid var(--orange)}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:13px}
+.stat{background:#fff;border-radius:var(--rs);border:1px solid var(--bdr);padding:13px 8px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.stn{font-size:24px;font-weight:700;color:var(--green)}
+.stl{font-size:12px;color:var(--txt2);margin-top:2px}
+.lrow{display:flex;align-items:center;padding:11px 0;border-bottom:1px solid var(--bdr);gap:11px}
+.lrow:last-child{border-bottom:none}
+.lic{font-size:20px;width:32px;text-align:center}
+.lnm{flex:1;font-size:14px;color:var(--txt);font-weight:500}
+.lbdg{padding:3px 9px;border-radius:11px;font-size:12px;font-weight:600}
+.bdg-ok{background:var(--gl);color:var(--gd)}
+.bdg-now{background:#FFF3CD;color:#8B5A00}
+.bdg-lock{background:#F0F0F0;color:var(--txt2)}
+.sec{font-size:12px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.06em;margin:15px 0 9px}
+.scrtitle{font-size:20px;font-weight:700;color:var(--txt);margin-bottom:3px}
+.scrsub{font-size:14px;color:var(--txt2);margin-bottom:13px}
+.lesson-menu{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.lm-btn{background:#fff;border:2px solid var(--bdr);border-radius:var(--r);padding:14px 12px;cursor:pointer;text-align:left;transition:all .2s;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.lm-btn.done{border-color:#9FE1CB;background:var(--gl)}
+.lm-btn.current{border-color:var(--green);background:var(--gl)}
+.lm-btn.locked{opacity:.5;cursor:default}
+.lm-num{font-size:11px;font-weight:700;color:var(--txt2);margin-bottom:3px}
+.lm-name{font-size:14px;font-weight:600;color:var(--txt);line-height:1.3}
+.lm-ic{font-size:22px;margin-bottom:5px}
+.lp-panel{background:var(--gl);border-radius:var(--r);padding:15px;margin-bottom:14px;border:1px solid #9FE1CB}
+.lp-title{font-size:17px;font-weight:700;color:var(--gd);margin-bottom:8px}
+.lp-sub{font-size:14px;color:#085041}
+.waveform{display:flex;align-items:center;gap:3px;height:44px}
+.wbar{width:4px;background:var(--green);border-radius:3px;height:15%;transition:height .1s}
+.listen-pl{background:#F0FAF6;border-radius:var(--r);padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px;border:1px solid #9FE1CB;margin-bottom:14px}
 </style>
 </head>
 <body>
 
-<div class="statusbar"></div>
-
-<!-- TOP BAR -->
 <div class="topbar">
   <div class="topbar-flag">🇨🇿</div>
   <div class="topbar-info">
     <div class="topbar-title">Čeština pro Světlanu</div>
-    <div class="topbar-sub" id="topbar-sub">Урок 3 · Приветствие · A1</div>
+    <div class="topbar-sub" id="tsub">Выберите урок</div>
   </div>
   <div class="streak">🔥 5</div>
 </div>
 
-<!-- MAIN SCROLL -->
 <div class="main" id="main">
 
-  <!-- ══════════ ДИАЛОГ ══════════ -->
-  <div class="screen active" id="screen-dialog">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-      <div>
-        <div class="screen-title">Приветствие</div>
-        <div class="screen-sub">Урок 3 из 30</div>
-      </div>
-      <span style="font-size:12px;background:var(--green-light);color:var(--green-dark);padding:4px 10px;border-radius:12px;font-weight:700;">A1</span>
-    </div>
-    <div class="progress-wrap"><div class="progress-fill" style="width:40%"></div></div>
+<!-- ═══ ГЛАВНАЯ / ВЫБОР УРОКА ═══ -->
+<div class="screen active" id="screen-home">
+  <div class="scrtitle">Мои уроки</div>
+  <div class="scrsub">20 уроков от A1 до A2+</div>
 
-    <div class="tip">
-      <span class="tip-icon">💡</span>
-      <span>Нажмите на кнопку ▶️ у Лючии — и услышите фразу медленно. Потом повторите вслух!</span>
-    </div>
-
-    <div class="dialog-tabs">
-      <button class="dtab active" onclick="switchDialog('s',this)">👤 Я (Светлана)</button>
-      <button class="dtab olga-tab" onclick="switchDialog('o',this)">👩 Ольга A2</button>
-    </div>
-
-    <!-- СВЕТЛАНА -->
-    <div id="d-svetlana">
-
-      <!-- 1 -->
-      <div class="avatar-row">
-        <div class="ava ava-lucia" onclick="speak('Dobrý den! Jak se jmenujete?',0.85)">Л</div>
-        <div class="bubble lucia">
-          <div class="bubble-who">Лючия — учительница</div>
-          <div class="bubble-cz">Dobrý den! Jak se jmenujete?</div>
-          <div class="bubble-ph">[до́бри дэн! як сэ ймэну́ете?]</div>
-          <div class="bubble-ru">Добрый день! Как вас зовут?</div>
-          <div class="ctrl-row">
-            <button class="play-btn" onclick="speak('Dobrý den! Jak se jmenujete?',currentSpeed)" title="Слушать">▶</button>
-            <div class="speed-pills" id="sp1">
-              <button class="sp active" onclick="setSpeedAll(0.8,this,'sp1')">0.8×</button>
-              <button class="sp" onclick="setSpeedAll(0.85,this,'sp1')">0.85×</button>
-              <button class="sp" onclick="setSpeedAll(1,this,'sp1')">1×</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2 -->
-      <div class="avatar-row">
-        <div class="ava ava-svetlana">С</div>
-        <div class="bubble svetlana">
-          <div class="bubble-who">Светлана — вы!</div>
-          <div class="bubble-cz">Dobrý den! Jmenuji se Světlana.</div>
-          <div class="bubble-ph">[до́бри дэн! ймэну́йи сэ Свэ́тлана]</div>
-          <div class="bubble-ru">Добрый день! Меня зовут Светлана.</div>
-          <div class="ctrl-row">
-            <button class="play-btn" onclick="speak('Dobrý den! Jmenuji se Světlana.',currentSpeed)">▶</button>
-            <button class="rec-btn" id="rec1" onclick="toggleRec('rec1','Dobrý den! Jmenuji se Světlana.')">🎤 Говорю!</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3 -->
-      <div class="avatar-row">
-        <div class="ava ava-lucia" onclick="speak('Těší mě, Světlano! Odkud jste?',0.85)">Л</div>
-        <div class="bubble lucia">
-          <div class="bubble-who">Лючия</div>
-          <div class="bubble-cz">Těší mě, Světlano! Odkud jste?</div>
-          <div class="bubble-ph">[тэ́ши мнэ, Свэ́тлано! о́ткуд йстэ?]</div>
-          <div class="bubble-ru">Приятно познакомиться, Светлана! Откуда вы?</div>
-          <div class="ctrl-row">
-            <button class="play-btn" onclick="speak('Těší mě, Světlano! Odkud jste?',currentSpeed)">▶</button>
-            <div class="speed-pills" id="sp2">
-              <button class="sp active" onclick="setSpeedAll(0.8,this,'sp2')">0.8×</button>
-              <button class="sp" onclick="setSpeedAll(0.85,this,'sp2')">0.85×</button>
-              <button class="sp" onclick="setSpeedAll(1,this,'sp2')">1×</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4 -->
-      <div class="avatar-row">
-        <div class="ava ava-svetlana">С</div>
-        <div class="bubble svetlana">
-          <div class="bubble-who">Светлана — ваша очередь!</div>
-          <div class="bubble-cz">Jsem z Ruska. Bydlím v Praze.</div>
-          <div class="bubble-ph">[йсэм с Ру́ска. бидли́м в Пра́зе]</div>
-          <div class="bubble-ru">Я из России. Живу в Праге.</div>
-          <div class="ctrl-row">
-            <button class="play-btn" onclick="speak('Jsem z Ruska. Bydlím v Praze.',currentSpeed)">▶</button>
-            <button class="rec-btn" onclick="toggleRec(null,'Jsem z Ruska. Bydlím v Praze.')">🎤 Говорю!</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 5 -->
-      <div class="avatar-row">
-        <div class="ava ava-lucia">Л</div>
-        <div class="bubble lucia">
-          <div class="bubble-who">Лючия</div>
-          <div class="bubble-cz">Výborně! Na shledanou, Světlano!</div>
-          <div class="bubble-ph">[ви́борнэ! на схледа́ноу, Свэ́тлано!]</div>
-          <div class="bubble-ru">Отлично! До свидания, Светлана!</div>
-          <div class="ctrl-row">
-            <button class="play-btn" onclick="speak('Výborně! Na shledanou, Světlano!',currentSpeed)">▶</button>
-            <div class="speed-pills" id="sp3">
-              <button class="sp active" onclick="setSpeedAll(0.8,this,'sp3')">0.8×</button>
-              <button class="sp" onclick="setSpeedAll(0.85,this,'sp3')">0.85×</button>
-              <button class="sp" onclick="setSpeedAll(1,this,'sp3')">1×</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 6 -->
-      <div class="avatar-row">
-        <div class="ava ava-svetlana">С</div>
-        <div class="bubble svetlana">
-          <div class="bubble-who">Светлана</div>
-          <div class="bubble-cz">Na shledanou! Děkuji!</div>
-          <div class="bubble-ph">[на схледа́ноу! дэ́куйи!]</div>
-          <div class="bubble-ru">До свидания! Спасибо!</div>
-          <div class="ctrl-row">
-            <button class="play-btn" onclick="speak('Na shledanou! Děkuji!',currentSpeed)">▶</button>
-            <button class="rec-btn" onclick="toggleRec(null,'Na shledanou! Děkuji!')">🎤 Говорю!</button>
-          </div>
-        </div>
-      </div>
-    </div><!-- /d-svetlana -->
-
-    <!-- ОЛЬГА -->
-    <div id="d-olga" style="display:none">
-      <div class="tip purple">
-        <span class="tip-icon">👩</span>
-        <span>Ольга уже A2 — смотрите, как тот же диалог звучит свободнее. Через месяц вы тоже так сможете!</span>
-      </div>
-
-      <div class="avatar-row">
-        <div class="ava ava-lucia">Л</div>
-        <div class="bubble lucia">
-          <div class="bubble-who">Лючия</div>
-          <div class="bubble-cz">Dobrý den! Jak se jmenujete?</div>
-          <div class="bubble-ru">Добрый день! Как вас зовут?</div>
-          <div class="ctrl-row">
-            <button class="play-btn" onclick="speak('Dobrý den! Jak se jmenujete?',0.9)">▶</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="avatar-row">
-        <div class="ava ava-olga">О</div>
-        <div class="bubble olga">
-          <div class="bubble-who">Ольга (A2)</div>
-          <div class="bubble-cz">Dobrý den! Jmenuji se Olga. A co vy?</div>
-          <div class="bubble-ru">Добрый день! Меня зовут Ольга. А вы?</div>
-          <div class="ctrl-row">
-            <button class="play-btn" onclick="speak('Dobrý den! Jmenuji se Olga. A co vy?',0.9)">▶</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="avatar-row">
-        <div class="ava ava-lucia">Л</div>
-        <div class="bubble lucia">
-          <div class="bubble-who">Лючия</div>
-          <div class="bubble-cz">Těší mě, Olgo! Odkud jste?</div>
-          <div class="bubble-ru">Приятно, Ольга! Откуда вы?</div>
-          <div class="ctrl-row">
-            <button class="play-btn" onclick="speak('Těší mě, Olgo! Odkud jste?',0.9)">▶</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="avatar-row">
-        <div class="ava ava-olga">О</div>
-        <div class="bubble olga">
-          <div class="bubble-who">Ольга</div>
-          <div class="bubble-cz">Jsem z Moskvy, ale teď bydlím tady v Praze. Mám ráda toto krásné město!</div>
-          <div class="bubble-ru">Я из Москвы, но сейчас живу здесь в Праге. Мне нравится этот красивый город!</div>
-          <div class="ctrl-row">
-            <button class="play-btn" onclick="speak('Jsem z Moskvy, ale teď bydlím tady v Praze. Mám ráda toto krásné město!',0.9)">▶</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="avatar-row">
-        <div class="ava ava-lucia">Л</div>
-        <div class="bubble lucia">
-          <div class="bubble-who">Лючия</div>
-          <div class="bubble-cz">Výborně! Vaše čeština je moc hezká!</div>
-          <div class="bubble-ru">Отлично! Ваш чешский очень хорош!</div>
-          <div class="ctrl-row">
-            <button class="play-btn" onclick="speak('Výborně! Vaše čeština je moc hezká!',0.9)">▶</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="tip purple">
-        <span class="tip-icon">⭐</span>
-        <span>Ольга добавила «A co vy?» (А вы?) и более длинный ответ. Это A2! Вы начинаете с A1 — это правильный путь.</span>
-      </div>
-    </div><!-- /d-olga -->
+  <div class="lp-panel">
+    <div class="lp-title">👩‍🏫 Лючия говорит:</div>
+    <div class="lp-sub">«Vítejte, Světlano! Začínáme!»<br><em style="font-size:13px;color:#1D9E75">[Ви́тейте, Свэ́тлано! Зачи́наме!]</em><br>Добро пожаловать, Светлана! Начинаем!</div>
   </div>
 
-  <!-- ══════════ СЛУШАНИЕ ══════════ -->
-  <div class="screen" id="screen-listen">
-    <div class="screen-title">Слушание</div>
-    <div class="screen-sub">Слушайте Лючию и выбирайте перевод</div>
+  <div class="lesson-menu" id="lesson-menu"></div>
+</div>
 
-    <div class="card">
-      <div class="listen-player">
-        <div class="listen-label">Нажмите ▶ и слушайте Лючию</div>
-        <div class="waveform" id="waveform">
-          <div class="wbar"></div><div class="wbar"></div><div class="wbar"></div>
-          <div class="wbar"></div><div class="wbar"></div><div class="wbar"></div>
-          <div class="wbar"></div><div class="wbar"></div><div class="wbar"></div>
-          <div class="wbar"></div><div class="wbar"></div><div class="wbar"></div>
-        </div>
-        <div style="display:flex;gap:12px;align-items:center">
-          <button class="play-btn big" onclick="playListen()" id="listen-play-btn">▶</button>
-          <div class="speed-pills" id="sp-listen">
-            <button class="sp active" onclick="setListenSp(0.8,this)">0.8×</button>
-            <button class="sp" onclick="setListenSp(0.85,this)">0.85×</button>
-            <button class="sp" onclick="setListenSp(0.9,this)">0.9×</button>
-            <button class="sp" onclick="setListenSp(1,this)">1×</button>
-          </div>
-        </div>
-      </div>
+<!-- ═══ УРОК ═══ -->
+<div class="screen" id="screen-lesson">
+  <div id="lesson-content"></div>
+</div>
 
-      <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:12px;">Что сказала Лючия?</div>
-      <div class="options" id="listen-opts">
-        <button class="opt" onclick="chkListen(this,false)">Как дела?</button>
-        <button class="opt" onclick="chkListen(this,true)">Добрый день! Как вас зовут?</button>
-        <button class="opt" onclick="chkListen(this,false)">До свидания!</button>
-        <button class="opt" onclick="chkListen(this,false)">Спасибо большое!</button>
-      </div>
-      <div class="feedback" id="listen-fb"></div>
+<!-- ═══ СЛОВА ═══ -->
+<div class="screen" id="screen-words">
+  <div class="scrtitle" id="words-title">Слова урока</div>
+  <div class="scrsub">Нажмите на слово — услышите произношение</div>
+  <div class="tip"><span>🔊</span><span>Нажмите и слушайте, потом повторяйте вслух!</span></div>
+  <div class="wgrid" id="words-grid"></div>
+</div>
+
+<!-- ═══ ЗАДАНИЕ ═══ -->
+<div class="screen" id="screen-exercise">
+  <div class="scrtitle">Задания</div>
+  <div class="scrsub">Лёгкие вопросы — вы справитесь!</div>
+  <div id="exercises-content"></div>
+</div>
+
+<!-- ═══ ПРОГРЕСС ═══ -->
+<div class="screen" id="screen-progress">
+  <div class="scrtitle">Мой прогресс</div>
+  <div class="scrsub">Светлана, вы молодец! 🌟</div>
+  <div class="stat-grid">
+    <div class="stat"><div class="stn" id="p-lessons">0</div><div class="stl">уроков</div></div>
+    <div class="stat"><div class="stn" style="color:var(--purple)" id="p-words">0</div><div class="stl">слов</div></div>
+    <div class="stat"><div class="stn" style="font-size:20px">🔥 5</div><div class="stl">дней подряд</div></div>
+  </div>
+  <div class="card">
+    <div style="font-size:16px;font-weight:700;margin-bottom:4px">📚 Все уроки</div>
+    <div id="progress-lessons"></div>
+  </div>
+  <div class="card" style="margin-top:4px">
+    <div style="font-size:16px;font-weight:700;margin-bottom:12px">👩‍🏫 Ваша команда</div>
+    <div style="display:flex;gap:11px;align-items:center;margin-bottom:10px">
+      <div class="ava al" style="width:42px;height:42px;font-size:16px">Л</div>
+      <div><div style="font-weight:700;font-size:15px">Лючия</div><div style="font-size:13px;color:var(--txt2)">Учительница · Носитель языка</div></div>
     </div>
-
-    <div class="card" style="margin-top:4px">
-      <div style="font-size:15px;font-weight:600;margin-bottom:10px;color:var(--text);">Следующая фраза</div>
-      <div class="listen-player">
-        <div class="listen-label">Слушайте снова</div>
-        <div style="display:flex;gap:12px;align-items:center">
-          <button class="play-btn big" onclick="speak('Těší mě! Odkud jste?',listenSpeed)">▶</button>
-          <div class="speed-pills" id="sp-listen2">
-            <button class="sp active" onclick="setListenSp2(0.8,this)">0.8×</button>
-            <button class="sp" onclick="setListenSp2(0.9,this)">0.9×</button>
-            <button class="sp" onclick="setListenSp2(1,this)">1×</button>
-          </div>
-        </div>
-      </div>
-      <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:12px;">Что сказала Лючия?</div>
-      <div class="options" id="listen-opts2">
-        <button class="opt" onclick="chkListen2(this,false)">Откуда вы, красавица?</button>
-        <button class="opt" onclick="chkListen2(this,false)">Где вы живёте?</button>
-        <button class="opt" onclick="chkListen2(this,true)">Приятно! Откуда вы?</button>
-        <button class="opt" onclick="chkListen2(this,false)">Вы говорите по-чешски?</button>
-      </div>
-      <div class="feedback" id="listen-fb2"></div>
+    <div style="display:flex;gap:11px;align-items:center">
+      <div class="ava ao" style="width:42px;height:42px;font-size:16px">О</div>
+      <div><div style="font-weight:700;font-size:15px">Ольга</div><div style="font-size:13px;color:var(--txt2)">Подруга по учёбе · Уровень A2</div></div>
     </div>
   </div>
-
-  <!-- ══════════ СЛОВА ══════════ -->
-  <div class="screen" id="screen-words">
-    <div class="screen-title">Слова урока</div>
-    <div class="screen-sub">Нажмите на слово — Лючия произнесёт его медленно</div>
-
-    <div class="tip">
-      <span class="tip-icon">🔊</span>
-      <span>Нажмите и слушайте, потом повторяйте вслух несколько раз!</span>
-    </div>
-
-    <div class="words-grid">
-      <button class="word-card" onclick="speak('Dobrý den',0.8)">
-        <div class="wc-icon">☀️</div>
-        <div class="wc-cz">Dobrý den</div>
-        <div class="wc-ru">Добрый день</div>
-        <div class="wc-ph">[до́бри дэн]</div>
-      </button>
-      <button class="word-card" onclick="speak('Ahoj',0.8)">
-        <div class="wc-icon">👋</div>
-        <div class="wc-cz">Ahoj</div>
-        <div class="wc-ru">Привет</div>
-        <div class="wc-ph">[аhой]</div>
-      </button>
-      <button class="word-card" onclick="speak('Jak se jmenujete',0.8)">
-        <div class="wc-icon">❓</div>
-        <div class="wc-cz">Jak se jmenujete?</div>
-        <div class="wc-ru">Как вас зовут?</div>
-        <div class="wc-ph">[як сэ ймэну́ете]</div>
-      </button>
-      <button class="word-card" onclick="speak('Jmenuji se',0.8)">
-        <div class="wc-icon">🙋</div>
-        <div class="wc-cz">Jmenuji se...</div>
-        <div class="wc-ru">Меня зовут...</div>
-        <div class="wc-ph">[ймэну́йи сэ]</div>
-      </button>
-      <button class="word-card" onclick="speak('Těší mě',0.8)">
-        <div class="wc-icon">🤝</div>
-        <div class="wc-cz">Těší mě</div>
-        <div class="wc-ru">Приятно</div>
-        <div class="wc-ph">[тэ́ши мнэ]</div>
-      </button>
-      <button class="word-card" onclick="speak('Odkud jste',0.8)">
-        <div class="wc-icon">🗺️</div>
-        <div class="wc-cz">Odkud jste?</div>
-        <div class="wc-ru">Откуда вы?</div>
-        <div class="wc-ph">[о́ткуд йстэ]</div>
-      </button>
-      <button class="word-card" onclick="speak('Jsem z Ruska',0.8)">
-        <div class="wc-icon">🇷🇺</div>
-        <div class="wc-cz">Jsem z Ruska</div>
-        <div class="wc-ru">Я из России</div>
-        <div class="wc-ph">[йсэм с Ру́ска]</div>
-      </button>
-      <button class="word-card" onclick="speak('Bydlím v Praze',0.8)">
-        <div class="wc-icon">🏙️</div>
-        <div class="wc-cz">Bydlím v Praze</div>
-        <div class="wc-ru">Живу в Праге</div>
-        <div class="wc-ph">[бидли́м в Пра́зе]</div>
-      </button>
-      <button class="word-card" onclick="speak('Na shledanou',0.8)">
-        <div class="wc-icon">👋</div>
-        <div class="wc-cz">Na shledanou</div>
-        <div class="wc-ru">До свидания</div>
-        <div class="wc-ph">[на схледа́ноу]</div>
-      </button>
-      <button class="word-card" onclick="speak('Děkuji',0.8)">
-        <div class="wc-icon">🙏</div>
-        <div class="wc-cz">Děkuji</div>
-        <div class="wc-ru">Спасибо</div>
-        <div class="wc-ph">[дэ́куйи]</div>
-      </button>
-      <button class="word-card" onclick="speak('Prosím',0.8)">
-        <div class="wc-icon">😊</div>
-        <div class="wc-cz">Prosím</div>
-        <div class="wc-ru">Пожалуйста</div>
-        <div class="wc-ph">[про́сим]</div>
-      </button>
-      <button class="word-card" onclick="speak('Výborně',0.8)">
-        <div class="wc-icon">⭐</div>
-        <div class="wc-cz">Výborně!</div>
-        <div class="wc-ru">Отлично!</div>
-        <div class="wc-ph">[ви́борнэ]</div>
-      </button>
-    </div>
-
-    <div class="section-title" style="margin-top:20px">Тема следующего урока</div>
-    <div class="tip">
-      <span class="tip-icon">📅</span>
-      <span>Урок 4 — В кафе: «Prosím jedno kafe» (Один кофе, пожалуйста). Скоро!</span>
-    </div>
-  </div>
-
-  <!-- ══════════ ЗАДАНИЕ ══════════ -->
-  <div class="screen" id="screen-exercise">
-    <div class="screen-title">Задания</div>
-    <div class="screen-sub">Лёгкие вопросы — вы справитесь!</div>
-
-    <!-- Задание 1 -->
-    <div class="card">
-      <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Задание 1 из 4</div>
-      <div class="ex-question">Лючия говорит: <span class="ex-highlight">«Jak se jmenujete?»</span><br>Что вы отвечаете?</div>
-      <div class="options" id="ex1">
-        <button class="opt" onclick="chkEx('ex1','fb1',this,false)">Na shledanou!</button>
-        <button class="opt" onclick="chkEx('ex1','fb1',this,true)">Jmenuji se Světlana.</button>
-        <button class="opt" onclick="chkEx('ex1','fb1',this,false)">Děkuji!</button>
-        <button class="opt" onclick="chkEx('ex1','fb1',this,false)">Jsem z Prahy.</button>
-      </div>
-      <div class="feedback" id="fb1"></div>
-    </div>
-
-    <!-- Задание 2 -->
-    <div class="card">
-      <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Задание 2 из 4</div>
-      <div class="ex-question">Как по-чешски <span class="ex-highlight">«До свидания»</span>?</div>
-      <div class="options" id="ex2">
-        <button class="opt" onclick="chkEx('ex2','fb2',this,false)">Ahoj!</button>
-        <button class="opt" onclick="chkEx('ex2','fb2',this,false)">Dobrý den</button>
-        <button class="opt" onclick="chkEx('ex2','fb2',this,true)">Na shledanou</button>
-        <button class="opt" onclick="chkEx('ex2','fb2',this,false)">Děkuji</button>
-      </div>
-      <div class="feedback" id="fb2"></div>
-    </div>
-
-    <!-- Задание 3 -->
-    <div class="card">
-      <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Задание 3 из 4</div>
-      <div class="ex-question">Как ответить на вопрос <span class="ex-highlight">«Odkud jste?»</span> (Откуда вы?)</div>
-      <div class="options" id="ex3">
-        <button class="opt" onclick="chkEx('ex3','fb3',this,false)">Jmenuji se Světlana.</button>
-        <button class="opt" onclick="chkEx('ex3','fb3',this,true)">Jsem z Ruska.</button>
-        <button class="opt" onclick="chkEx('ex3','fb3',this,false)">Těší mě!</button>
-        <button class="opt" onclick="chkEx('ex3','fb3',this,false)">Výborně!</button>
-      </div>
-      <div class="feedback" id="fb3"></div>
-    </div>
-
-    <!-- Задание 4 -->
-    <div class="card">
-      <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Задание 4 из 4</div>
-      <div class="ex-question">Что значит <span class="ex-highlight">«Těší mě»</span>?</div>
-      <div class="options" id="ex4">
-        <button class="opt" onclick="chkEx('ex4','fb4',this,false)">Спасибо</button>
-        <button class="opt" onclick="chkEx('ex4','fb4',this,false)">Как дела?</button>
-        <button class="opt" onclick="chkEx('ex4','fb4',this,true)">Приятно познакомиться</button>
-        <button class="opt" onclick="chkEx('ex4','fb4',this,false)">Пожалуйста</button>
-      </div>
-      <div class="feedback" id="fb4"></div>
-    </div>
-  </div>
-
-  <!-- ══════════ ПРОГРЕСС ══════════ -->
-  <div class="screen" id="screen-progress">
-    <div class="screen-title">Мой прогресс</div>
-    <div class="screen-sub">Светлана, вы молодец! 🌟</div>
-
-    <div class="stat-grid">
-      <div class="stat-card">
-        <div class="stat-num">3</div>
-        <div class="stat-lbl">уроков</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num purple">24</div>
-        <div class="stat-lbl">слов</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num amber">🔥 5</div>
-        <div class="stat-lbl">дней подряд</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:2px;">📚 Уроки</div>
-      <div class="lesson-row">
-        <div class="lesson-icon">✅</div>
-        <div class="lesson-name">Урок 1 — Алфавит и звуки</div>
-        <span class="lesson-badge badge-done">Готово</span>
-      </div>
-      <div class="lesson-row">
-        <div class="lesson-icon">✅</div>
-        <div class="lesson-name">Урок 2 — Цифры 1–10</div>
-        <span class="lesson-badge badge-done">Готово</span>
-      </div>
-      <div class="lesson-row">
-        <div class="lesson-icon">▶️</div>
-        <div class="lesson-name">Урок 3 — Приветствие</div>
-        <span class="lesson-badge badge-now">Сейчас</span>
-      </div>
-      <div class="lesson-row" style="opacity:0.5">
-        <div class="lesson-icon">🔒</div>
-        <div class="lesson-name">Урок 4 — В кафе</div>
-        <span class="lesson-badge badge-lock">Скоро</span>
-      </div>
-      <div class="lesson-row" style="opacity:0.5">
-        <div class="lesson-icon">🔒</div>
-        <div class="lesson-name">Урок 5 — В магазине</div>
-        <span class="lesson-badge badge-lock">Скоро</span>
-      </div>
-      <div class="lesson-row" style="opacity:0.5">
-        <div class="lesson-icon">🔒</div>
-        <div class="lesson-name">Урок 6 — Транспорт</div>
-        <span class="lesson-badge badge-lock">Скоро</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:12px;">👩‍🏫 Ваша команда</div>
-      <div class="avatar-info-row">
-        <div class="ava-small" style="background:linear-gradient(135deg,#1D9E75,#0F6E56)">Л</div>
-        <div>
-          <div class="ava-name">Лючия</div>
-          <div class="ava-desc">Ваша учительница · Носитель языка · 45 лет</div>
-        </div>
-      </div>
-      <div style="width:100%;height:1px;background:var(--border);margin:4px 0"></div>
-      <div class="avatar-info-row">
-        <div class="ava-small" style="background:linear-gradient(135deg,#7F77DD,#534AB7)">О</div>
-        <div>
-          <div class="ava-name">Ольга</div>
-          <div class="ava-desc">Подруга по учёбе · Уровень A2 · Пример для вас</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="tip">
-      <span class="tip-icon">🌟</span>
-      <span>Отличный старт! Занимайтесь 15 минут каждый день — и через 2 месяца вы будете свободно общаться в магазине и кафе!</span>
-    </div>
-  </div>
+  <div class="tip"><span>🌟</span><span>15 минут каждый день — и через 2 месяца вы будете свободно говорить в кафе, магазине и с соседями!</span></div>
+</div>
 
 </div><!-- /main -->
 
-<!-- BOTTOM NAV -->
 <div class="bottomnav">
-  <button class="nav-item active" onclick="showScreen('dialog',this)">
-    <span class="nav-icon">💬</span>
-    <span class="nav-label">Диалог</span>
-  </button>
-  <button class="nav-item" onclick="showScreen('listen',this)">
-    <span class="nav-icon">🎧</span>
-    <span class="nav-label">Слушание</span>
-  </button>
-  <button class="nav-item" onclick="showScreen('words',this)">
-    <span class="nav-icon">📖</span>
-    <span class="nav-label">Слова</span>
-  </button>
-  <button class="nav-item" onclick="showScreen('exercise',this)">
-    <span class="nav-icon">✏️</span>
-    <span class="nav-label">Задание</span>
-  </button>
-  <button class="nav-item" onclick="showScreen('progress',this)">
-    <span class="nav-icon">📊</span>
-    <span class="nav-label">Прогресс</span>
-  </button>
+  <button class="nvi active" onclick="showScreen('home',this)"><span class="nvi-ic">🏠</span><span class="nvi-lb">Уроки</span></button>
+  <button class="nvi" onclick="showScreen('lesson',this)" id="nav-lesson"><span class="nvi-ic">💬</span><span class="nvi-lb">Диалог</span></button>
+  <button class="nvi" onclick="showScreen('words',this)" id="nav-words"><span class="nvi-ic">📖</span><span class="nvi-lb">Слова</span></button>
+  <button class="nvi" onclick="showScreen('exercise',this)" id="nav-ex"><span class="nvi-ic">✏️</span><span class="nvi-lb">Задание</span></button>
+  <button class="nvi" onclick="showScreen('progress',this)"><span class="nvi-ic">📊</span><span class="nvi-lb">Прогресс</span></button>
 </div>
 
 <script>
-let currentSpeed = 0.8;
-let listenSpeed = 0.8;
-let listenSpeed2 = 0.8;
-const listenPhrase = 'Dobrý den! Jak se jmenujete?';
+// ════════════════════════════════════════════
+// ДАННЫЕ — 20 УРОКОВ
+// ════════════════════════════════════════════
+const LESSONS = [
+{id:1,title:"Алфавит и звуки",icon:"🔤",level:"A1",
+words:[
+  {cz:"á, é, í",ru:"длинные гласные",ph:"[аа, ээ, ии]",ic:"🔤"},
+  {cz:"č, š, ž",ru:"ч, ш, ж",ph:"[ч, ш, ж]",ic:"🗣️"},
+  {cz:"ř",ru:"рж (особый звук)",ph:"[рж]",ic:"🎵"},
+  {cz:"ů / ú",ru:"длинное У",ph:"[уу]",ic:"👄"},
+  {cz:"ě",ru:"е после согласных",ph:"[йэ]",ic:"📝"},
+  {cz:"ch",ru:"х (как в «хлеб»)",ph:"[х]",ic:"😤"}
+],
+dialogs:[
+  {who:"l",text:"Dobrý den! Jsem Lucie.",ph:"[до́бри дэн! йсэм Лу́цие]",ru:"Добрый день! Я Лючия."},
+  {who:"s",text:"Dobrý den! Jsem Světlana.",ph:"[до́бри дэн! йсэм Свэ́тлана]",ru:"Добрый день! Я Светлана."},
+  {who:"l",text:"Opakujte po mně: á, é, í, ó, ú",ph:"[опакуйтэ по мнэ]",ru:"Повторяйте за мной: а, э, и, о, у"},
+  {who:"s",text:"á, é, í, ó, ú",ph:"[аа, ээ, ии, оо, уу]",ru:"(повторяю звуки)"},
+  {who:"l",text:"Výborně! A teď: č, š, ž, ř",ph:"[ви́борнэ! а тэдь]",ru:"Отлично! А теперь: ч, ш, ж, рж"}
+],
+dialogs_olga:[
+  {who:"l",text:"Opakujte: Příliš žluťoučký kůň.",ph:"",ru:"Повторите: Очень желтоватая лошадь (скороговорка)"},
+  {who:"o",text:"Příliš žluťoučký kůň úpěl ďábelské ódy.",ph:"[пши́лиш жлутёучки кунь]",ru:"(сложная скороговорка — Ольга справляется!)"}
+],
+exercises:[
+  {q:"Какой звук особенный только в чешском?",opts:["ч (č)","рж (ř)","ш (š)","ж (ž)"],correct:1,ok:"Правильно! «ř» — уникальный чешский звук, похожий на «рж»",no:"Не совсем. Уникальный чешский звук — «ř»"},
+  {q:"Как звучит «á»?",opts:["короткое А","длинное АА","звук Э","звук И"],correct:1,ok:"Верно! «á» — это долгое, протяжное А",no:"Нет. «á» — долгое А, тянется дольше обычного"}
+]},
 
-function showScreen(id, navEl) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + id).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  if (navEl) navEl.classList.add('active');
-  document.getElementById('main').scrollTop = 0;
+{id:2,title:"Цифры 1–20",icon:"🔢",level:"A1",
+words:[
+  {cz:"jedna / jeden",ru:"один / одна",ph:"[е́дна / е́ден]",ic:"1️⃣"},
+  {cz:"dva / dvě",ru:"два / две",ph:"[два / двэ]",ic:"2️⃣"},
+  {cz:"tři",ru:"три",ph:"[тши]",ic:"3️⃣"},
+  {cz:"čtyři",ru:"четыре",ph:"[чти́ши]",ic:"4️⃣"},
+  {cz:"pět",ru:"пять",ph:"[пэть]",ic:"5️⃣"},
+  {cz:"deset",ru:"десять",ph:"[дэ́сет]",ic:"🔟"},
+  {cz:"patnáct",ru:"пятнадцать",ph:"[па́тнаацт]",ic:"🔢"},
+  {cz:"dvacet",ru:"двадцать",ph:"[два́цет]",ic:"🔢"}
+],
+dialogs:[
+  {who:"l",text:"Kolik je vám let, Světlano?",ph:"[ко́лик йе ваам лет?]",ru:"Сколько вам лет, Светлана?"},
+  {who:"s",text:"Je mi šedesát let.",ph:"[йе ми шедэса́т лет]",ru:"Мне шестьдесят лет."},
+  {who:"l",text:"A kolik stojí káva? Jedna, nebo dvě?",ph:"[а ко́лик стойи́ ка́ва?]",ru:"А сколько стоит кофе? Один или два?"},
+  {who:"s",text:"Prosím dvě kávy.",ph:"[про́сим двэ ка́ви]",ru:"Пожалуйста, два кофе."},
+  {who:"l",text:"Výborně! Čísla jsou důležitá.",ph:"[чи́сла йсоу дуулежи́та]",ru:"Отлично! Числа очень важны."}
+],
+dialogs_olga:[
+  {who:"l",text:"Kolik lidí je ve vaší rodině?",ph:"",ru:"Сколько человек в вашей семье?"},
+  {who:"o",text:"Jsme čtyři: já, manžel a dvě děti.",ph:"[йсмэ чти́ши]",ru:"Нас четверо: я, муж и двое детей."}
+],
+exercises:[
+  {q:"Как по-чешски «пять»?",opts:["čtyři","šest","pět","tři"],correct:2,ok:"Правильно! pět = пять",no:"Нет. Пять = pět [пэть]"},
+  {q:"Что значит «dvacet»?",opts:["двенадцать","двое","двадцать","два"],correct:2,ok:"Верно! dvacet = двадцать",no:"Нет. dvacet = двадцать"}
+]},
+
+{id:3,title:"Приветствие",icon:"👋",level:"A1",
+words:[
+  {cz:"Dobrý den",ru:"Добрый день",ph:"[до́бри дэн]",ic:"☀️"},
+  {cz:"Ahoj",ru:"Привет",ph:"[аhой]",ic:"👋"},
+  {cz:"Jak se jmenujete?",ru:"Как вас зовут?",ph:"[як сэ ймэну́ете]",ic:"❓"},
+  {cz:"Jmenuji se...",ru:"Меня зовут...",ph:"[ймэну́йи сэ]",ic:"🙋"},
+  {cz:"Těší mě",ru:"Приятно познакомиться",ph:"[тэ́ши мнэ]",ic:"🤝"},
+  {cz:"Na shledanou",ru:"До свидания",ph:"[на схледа́ноу]",ic:"👋"},
+  {cz:"Děkuji",ru:"Спасибо",ph:"[дэ́куйи]",ic:"🙏"},
+  {cz:"Prosím",ru:"Пожалуйста",ph:"[про́сим]",ic:"😊"}
+],
+dialogs:[
+  {who:"l",text:"Dobrý den! Jak se jmenujete?",ph:"[до́бри дэн! як сэ ймэну́ете?]",ru:"Добрый день! Как вас зовут?"},
+  {who:"s",text:"Dobrý den! Jmenuji se Světlana.",ph:"[до́бри дэн! ймэну́йи сэ Свэ́тлана]",ru:"Добрый день! Меня зовут Светлана."},
+  {who:"l",text:"Těší mě, Světlano! Odkud jste?",ph:"[тэ́ши мнэ! о́ткуд йстэ?]",ru:"Приятно, Светлана! Откуда вы?"},
+  {who:"s",text:"Jsem z Ruska. Bydlím v Praze.",ph:"[йсэм с Ру́ска. бидли́м в Пра́зе]",ru:"Я из России. Живу в Праге."},
+  {who:"l",text:"Výborně! Na shledanou, Světlano!",ph:"[ви́борнэ! на схледа́ноу]",ru:"Отлично! До свидания, Светлана!"},
+  {who:"s",text:"Na shledanou! Děkuji!",ph:"[на схледа́ноу! дэ́куйи]",ru:"До свидания! Спасибо!"}
+],
+dialogs_olga:[
+  {who:"l",text:"Dobrý den! Jak se jmenujete?",ph:"",ru:"Добрый день! Как вас зовут?"},
+  {who:"o",text:"Dobrý den! Jmenuji se Olga. A co vy?",ph:"[а цо ви?]",ru:"Добрый день! Меня зовут Ольга. А вы?"},
+  {who:"l",text:"Těší mě, Olgo! Odkud jste?",ph:"",ru:"Приятно, Ольга! Откуда вы?"},
+  {who:"o",text:"Jsem z Moskvy, ale teď bydlím v Praze. Mám ráda toto město!",ph:"[мам ра́да то́то мнэ́сто]",ru:"Я из Москвы, но сейчас живу в Праге. Мне нравится этот город!"}
+],
+exercises:[
+  {q:"Лючия говорит: «Jak se jmenujete?» Что вы отвечаете?",opts:["Na shledanou!","Jmenuji se Světlana.","Děkuji!","Dobrý den!"],correct:1,ok:"Отлично! Jmenuji se Světlana — правильный ответ",no:"Нет. На вопрос «как зовут» отвечаем: Jmenuji se..."},
+  {q:"Как по-чешски «До свидания»?",opts:["Ahoj","Dobrý den","Na shledanou","Děkuji"],correct:2,ok:"Верно! Na shledanou = До свидания",no:"Нет. До свидания = Na shledanou [на схледа́ноу]"}
+]},
+
+{id:4,title:"В кафе",icon:"☕",level:"A1",
+words:[
+  {cz:"káva",ru:"кофе",ph:"[ка́ва]",ic:"☕"},
+  {cz:"čaj",ru:"чай",ph:"[чай]",ic:"🍵"},
+  {cz:"voda",ru:"вода",ph:"[во́да]",ic:"💧"},
+  {cz:"pivo",ru:"пиво",ph:"[пи́во]",ic:"🍺"},
+  {cz:"Prosím...",ru:"Пожалуйста... / Можно...",ph:"[про́сим]",ic:"🙋"},
+  {cz:"Kolik to stojí?",ru:"Сколько стоит?",ph:"[ко́лик то стойи́?]",ic:"💰"},
+  {cz:"Účet, prosím.",ru:"Счёт, пожалуйста.",ph:"[у́чет, про́сим]",ic:"🧾"},
+  {cz:"Jedno / Dvě",ru:"Одно / Два (для заказа)",ph:"[е́дно / двэ]",ic:"1️⃣"}
+],
+dialogs:[
+  {who:"l",text:"Dobrý den! Co si dáte?",ph:"[цо си да́те?]",ru:"Добрый день! Что будете?"},
+  {who:"s",text:"Prosím jednu kávu, děkuji.",ph:"[про́сим е́дну ка́ву]",ru:"Пожалуйста, один кофе, спасибо."},
+  {who:"l",text:"S mlékem nebo bez mléka?",ph:"[с мле́кем не́бо бэс мле́ка?]",ru:"С молоком или без молока?"},
+  {who:"s",text:"S mlékem, prosím.",ph:"[с мле́кем, про́сим]",ru:"С молоком, пожалуйста."},
+  {who:"l",text:"Dobře. A něco k jídlu?",ph:"[до́бже. а нье́цо к йи́длу?]",ru:"Хорошо. И что-нибудь поесть?"},
+  {who:"s",text:"Ne, děkuji. Jen kávu. Kolik to stojí?",ph:"[нэ, дэ́куйи. йен ка́ву]",ru:"Нет, спасибо. Только кофе. Сколько стоит?"},
+  {who:"l",text:"Padesát korun, prosím.",ph:"[падэса́т ко́рун]",ru:"Пятьдесят крон, пожалуйста."}
+],
+dialogs_olga:[
+  {who:"l",text:"Co si dáte?",ph:"",ru:"Что будете?"},
+  {who:"o",text:"Prosím velké cappuccino a croissant. A máte nějaký bezlepkový dezert?",ph:"",ru:"Большое капучино и круассан. И есть у вас безглютеновый десерт?"},
+  {who:"l",text:"Bohužel nemáme.",ph:"[боhу́жел нэма́мэ]",ru:"К сожалению, нет."},
+  {who:"o",text:"Nevadí, děkuji.",ph:"[нэва́ди]",ru:"Ничего, спасибо."}
+],
+exercises:[
+  {q:"Как попросить кофе в кафе?",opts:["Kolik to stojí?","Prosím jednu kávu.","Na shledanou!","Nemám kávu."],correct:1,ok:"Правильно! Prosím jednu kávu = Пожалуйста, один кофе",no:"Нет. Заказываем: Prosím jednu kávu."},
+  {q:"Что значит «Účet, prosím»?",opts:["Ещё кофе","Без молока","Счёт, пожалуйста","Спасибо, всё вкусно"],correct:2,ok:"Верно! Účet = счёт",no:"Нет. Účet = счёт. Učet prosím = Счёт, пожалуйста"}
+]},
+
+{id:5,title:"В магазине",icon:"🛒",level:"A1",
+words:[
+  {cz:"obchod",ru:"магазин",ph:"[о́бход]",ic:"🏪"},
+  {cz:"Kde je...?",ru:"Где находится...?",ph:"[кдэ йэ]",ic:"❓"},
+  {cz:"Chci koupit...",ru:"Хочу купить...",ph:"[хци коу́пит]",ic:"🛍️"},
+  {cz:"chleba",ru:"хлеб",ph:"[хле́ба]",ic:"🍞"},
+  {cz:"mléko",ru:"молоко",ph:"[мле́ко]",ic:"🥛"},
+  {cz:"ovoce",ru:"фрукты",ph:"[о́воцэ]",ic:"🍎"},
+  {cz:"Máte...?",ru:"У вас есть...?",ph:"[ма́тэ]",ic:"🤔"},
+  {cz:"Levnější",ru:"Подешевле",ph:"[лэвнэ́йши]",ic:"💸"}
+],
+dialogs:[
+  {who:"l",text:"Dobrý den! Mohu vám pomoci?",ph:"[мо́ху ваам помо́ци?]",ru:"Добрый день! Могу вам помочь?"},
+  {who:"s",text:"Ano, prosím. Kde je chléb?",ph:"[а́но, про́сим. кдэ йэ хлеб?]",ru:"Да, пожалуйста. Где хлеб?"},
+  {who:"l",text:"Chléb je tam, v druhé uličce.",ph:"[хлеб йэ там, в дру́hэ у́личцэ]",ru:"Хлеб там, во второй полке."},
+  {who:"s",text:"Děkuji. A máte čerstvé mléko?",ph:"[а ма́тэ чэ́рстве мле́ко?]",ru:"Спасибо. А есть свежее молоко?"},
+  {who:"l",text:"Ano, tady je.",ph:"[а́но, та́ди йэ]",ru:"Да, вот оно."},
+  {who:"s",text:"Kolik to stojí celkem?",ph:"[ко́лик то стойи́ цэ́лкем?]",ru:"Сколько стоит всего?"}
+],
+dialogs_olga:[
+  {who:"l",text:"Mohu vám pomoci?",ph:"",ru:"Могу помочь?"},
+  {who:"o",text:"Hledám něco levnějšího na oběd. Máte nějaké akce?",ph:"[hлэда́м нье́цо лэвнэ́йшиhо]",ru:"Ищу что-нибудь подешевле на обед. Есть акции?"},
+  {who:"l",text:"Ano! Dnes máme slevu na jogurty.",ph:"",ru:"Да! Сегодня скидка на йогурты."},
+  {who:"o",text:"Skvělé, vezmu si tři.",ph:"[сквэ́ле, вэзму си тши]",ru:"Отлично, возьму три."}
+],
+exercises:[
+  {q:"Как спросить «Где хлеб?»",opts:["Chci chléb.","Kde je chléb?","Máte chléb?","Kolik stojí chléb?"],correct:1,ok:"Верно! Kde je = где есть/находится",no:"Нет. Где? = Kde je...?"},
+  {q:"Что значит «Máte...?»",opts:["Хочу...","Где...?","У вас есть...?","Сколько стоит...?"],correct:2,ok:"Правильно! Máte = у вас есть",no:"Нет. Máte = У вас есть...?"}
+]},
+
+{id:6,title:"Транспорт и адрес",icon:"🚌",level:"A1",
+words:[
+  {cz:"autobus",ru:"автобус",ph:"[а́утобус]",ic:"🚌"},
+  {cz:"metro",ru:"метро",ph:"[мэ́тро]",ic:"🚇"},
+  {cz:"zastávka",ru:"остановка",ph:"[заста́вка]",ic:"🚏"},
+  {cz:"Kde je zastávka?",ru:"Где остановка?",ph:"[кдэ йэ заста́вка?]",ic:"❓"},
+  {cz:"vlevo / vpravo",ru:"налево / направо",ph:"[вле́во / впра́во]",ic:"↔️"},
+  {cz:"rovně",ru:"прямо",ph:"[ро́внэ]",ic:"⬆️"},
+  {cz:"blízko / daleko",ru:"близко / далеко",ph:"[бли́зко / да́лэко]",ic:"📍"},
+  {cz:"Jak se dostanu...?",ru:"Как добраться до...?",ph:"[як сэ доста́ну]",ic:"🗺️"}
+],
+dialogs:[
+  {who:"l",text:"Promiňte, jak se dostanu na Václavské náměstí?",ph:"[проминьтэ, як сэ доста́ну?]",ru:"Извините, как добраться до Вацлавской площади?"},
+  {who:"s",text:"Jděte rovně a pak vlevo.",ph:"[йдьетэ ро́внэ а пак вле́во]",ru:"Идите прямо и потом налево."},
+  {who:"l",text:"Je to daleko?",ph:"[йэ то да́лэко?]",ru:"Это далеко?"},
+  {who:"s",text:"Ne, je to blízko. Asi pět minut pěšky.",ph:"[нэ, йэ то бли́зко. а́си пэть мину́т пьешки]",ru:"Нет, это близко. Около пяти минут пешком."},
+  {who:"l",text:"Děkuji moc!",ph:"[дэ́куйи моц!]",ru:"Большое спасибо!"}
+],
+dialogs_olga:[
+  {who:"l",text:"Jak se dostanu na letiště?",ph:"",ru:"Как добраться до аэропорта?"},
+  {who:"o",text:"Nejlépe autobusem číslo 119 od Nádraží Veleslavín. Jede to asi dvacet minut.",ph:"",ru:"Лучше всего автобусом 119 от станции Велеславин. Едет около двадцати минут."}
+],
+exercises:[
+  {q:"Как сказать «прямо»?",opts:["vlevo","vpravo","rovně","blízko"],correct:2,ok:"Верно! rovně = прямо",no:"Нет. Прямо = rovně [ро́внэ]"},
+  {q:"Что значит «zastávka»?",opts:["вокзал","остановка","аэропорт","улица"],correct:1,ok:"Правильно! zastávka = остановка",no:"Нет. zastávka = остановка (автобуса/трамвая)"}
+]},
+
+{id:7,title:"Семья",icon:"👨‍👩‍👧",level:"A1",
+words:[
+  {cz:"matka / máma",ru:"мать / мама",ph:"[ма́тка / ма́ма]",ic:"👩"},
+  {cz:"otec / táta",ru:"отец / папа",ph:"[о́тец / та́та]",ic:"👨"},
+  {cz:"manžel / manželka",ru:"муж / жена",ph:"[ма́ньжел / ма́ньжелка]",ic:"💑"},
+  {cz:"syn / dcera",ru:"сын / дочь",ph:"[сын / дцэ́ра]",ic:"👦👧"},
+  {cz:"sestra / bratr",ru:"сестра / брат",ph:"[сэ́стра / бра́тр]",ic:"👫"},
+  {cz:"babička / dědeček",ru:"бабушка / дедушка",ph:"[ба́бичка / дьедэ́чек]",ic:"👵👴"},
+  {cz:"rodina",ru:"семья",ph:"[ро́дина]",ic:"👨‍👩‍👧‍👦"},
+  {cz:"Mám...",ru:"У меня есть...",ph:"[маам]",ic:"❤️"}
+],
+dialogs:[
+  {who:"l",text:"Máte rodinu, Světlano?",ph:"[ма́тэ ро́дину?]",ru:"У вас есть семья, Светлана?"},
+  {who:"s",text:"Ano, mám manžela a dvě dcery.",ph:"[а́но, маам ма́ньжела а двэ дцэ́ри]",ru:"Да, у меня есть муж и две дочери."},
+  {who:"l",text:"A máte vnoučata?",ph:"[а ма́тэ вноу́чата?]",ru:"А у вас есть внуки?"},
+  {who:"s",text:"Ano! Mám tři vnuky. Jsou roztomilí!",ph:"[маам тши вну́ки. йсоу розтоми́ли!]",ru:"Да! У меня три внука. Они очаровательные!"},
+  {who:"l",text:"To je krásné! Rodina je nejdůležitější.",ph:"[то йэ кра́снэ! ро́дина йэ нэйдуулежи́тэйши]",ru:"Как прекрасно! Семья — это самое важное."}
+],
+dialogs_olga:[
+  {who:"l",text:"Jak velká je vaše rodina?",ph:"",ru:"Какая у вас большая семья?"},
+  {who:"o",text:"Jsme docela velká rodina. Mám rodiče, bratra, jeho ženu a dvě neteře.",ph:"",ru:"Мы довольно большая семья. Есть родители, брат, его жена и две племянницы."}
+],
+exercises:[
+  {q:"Как по-чешски «бабушка»?",opts:["matka","sestra","babička","dcera"],correct:2,ok:"Верно! babička = бабушка",no:"Нет. Бабушка = babička [ба́бичка]"},
+  {q:"Что значит «Mám manžela»?",opts:["У меня есть сестра","У меня есть муж","Я замужем","Я люблю мужа"],correct:1,ok:"Правильно! Mám manžela = У меня есть муж",no:"Нет. Mám manžela = У меня есть муж"}
+]},
+
+{id:8,title:"Дом и квартира",icon:"🏠",level:"A1",
+words:[
+  {cz:"byt / dům",ru:"квартира / дом",ph:"[бит / дуум]",ic:"🏠"},
+  {cz:"pokoj",ru:"комната",ph:"[по́кой]",ic:"🛋️"},
+  {cz:"kuchyň",ru:"кухня",ph:"[ку́хинь]",ic:"🍳"},
+  {cz:"koupelna",ru:"ванная",ph:"[коу́пелна]",ic:"🛁"},
+  {cz:"okno / dveře",ru:"окно / дверь",ph:"[о́кно / двэ́же]",ic:"🪟🚪"},
+  {cz:"stůl / židle",ru:"стол / стул",ph:"[стуул / жи́длэ]",ic:"🪑"},
+  {cz:"Bydlím v...",ru:"Я живу в...",ph:"[бидли́м в]",ic:"📍"},
+  {cz:"Nájem",ru:"аренда/квартплата",ph:"[на́йем]",ic:"💵"}
+],
+dialogs:[
+  {who:"l",text:"Kde bydlíte, Světlano?",ph:"[кдэ бидли́тэ?]",ru:"Где вы живёте, Светлана?"},
+  {who:"s",text:"Bydlím v Praze, v bytě na Žižkově.",ph:"[бидли́м в Пра́зэ, в би́тэ на Жи́жковэ]",ru:"Живу в Праге, в квартире на Жижкове."},
+  {who:"l",text:"Jak velký je váš byt?",ph:"[як вэ́лки йэ ваш бит?]",ru:"Какая у вас квартира по размеру?"},
+  {who:"s",text:"Mám dvoupokojový byt. Je útulný.",ph:"[маам двоупокойови́ бит. йэ у́тулни]",ru:"У меня двухкомнатная квартира. Уютная."},
+  {who:"l",text:"To zní hezky!",ph:"[то зни́ hэзки!]",ru:"Звучит хорошо!"}
+],
+dialogs_olga:[
+  {who:"l",text:"Jak se vám líbí váš byt?",ph:"",ru:"Как вам нравится ваша квартира?"},
+  {who:"o",text:"Velmi se mi líbí! Máme velkou kuchyň a krásný výhled na park. Jen nájem je trochu drahý.",ph:"",ru:"Очень нравится! Большая кухня и красивый вид на парк. Только аренда немного дорогая."}
+],
+exercises:[
+  {q:"Как по-чешски «кухня»?",opts:["pokoj","koupelna","kuchyň","okno"],correct:2,ok:"Правильно! kuchyň = кухня",no:"Нет. Кухня = kuchyň [ку́хинь]"},
+  {q:"Что значит «byt»?",opts:["дом","квартира","комната","улица"],correct:1,ok:"Верно! byt = квартира",no:"Нет. byt = квартира. Дом = dům"}
+]},
+
+{id:9,title:"Еда и напитки",icon:"🍽️",level:"A1",
+words:[
+  {cz:"snídaně / oběd / večeře",ru:"завтрак / обед / ужин",ph:"[сни́данэ / о́бед / вэ́чэже]",ic:"🍽️"},
+  {cz:"chléb / rohlík",ru:"хлеб / рогалик",ph:"[хлеб / ро́hлик]",ic:"🍞"},
+  {cz:"maso / kuřecí",ru:"мясо / куриное",ph:"[ма́со / ку́жэци]",ic:"🍗"},
+  {cz:"zelenina / salát",ru:"овощи / салат",ph:"[зэлэни́на / са́лаат]",ic:"🥗"},
+  {cz:"polévka",ru:"суп",ph:"[по́левка]",ic:"🍲"},
+  {cz:"sladký / slaný",ru:"сладкий / солёный",ph:"[сла́дки / сла́ни]",ic:"🍬🧂"},
+  {cz:"Mám hlad.",ru:"Я голодна.",ph:"[маам hлад]",ic:"😋"},
+  {cz:"Je to chutné!",ru:"Это вкусно!",ph:"[йэ то хутнэ́!]",ic:"😍"}
+],
+dialogs:[
+  {who:"l",text:"Co jíte ráno, Světlano?",ph:"[цо йи́тэ ра́но?]",ru:"Что вы едите утром, Светлана?"},
+  {who:"s",text:"Ráno jím chléb s máslem a piji čaj.",ph:"[ра́но йим хлеб с ма́слем а пийи чай]",ru:"Утром ем хлеб с маслом и пью чай."},
+  {who:"l",text:"A co máte ráda k obědu?",ph:"[а цо ма́тэ ра́да к о́беду?]",ru:"А что вы любите на обед?"},
+  {who:"s",text:"Mám ráda polévku a kuřecí maso se zeleninou.",ph:"[маам ра́да по́левку а ку́жэци ма́со]",ru:"Люблю суп и куриное мясо с овощами."},
+  {who:"l",text:"Výborně! Je to zdravé.",ph:"[йэ то здра́ве]",ru:"Отлично! Это полезно."}
+],
+dialogs_olga:[
+  {who:"l",text:"Umíte vařit české jídlo?",ph:"",ru:"Умеете готовить чешскую еду?"},
+  {who:"o",text:"Trochu ano! Naučila jsem se dělat svíčkovou a knedlíky. Ale trvá to hodně dlouho.",ph:"",ru:"Немного да! Научилась делать свичкову и кнедлики. Но это занимает много времени."}
+],
+exercises:[
+  {q:"Как сказать «Я голодна»?",opts:["Jsem unavená.","Mám hlad.","Je to chutné!","Mám žízeň."],correct:1,ok:"Верно! Mám hlad = Я голодна",no:"Нет. Я голодна = Mám hlad [маам hлад]"},
+  {q:"Что значит «polévka»?",opts:["салат","мясо","суп","хлеб"],correct:2,ok:"Правильно! polévka = суп",no:"Нет. polévka = суп [по́левка]"}
+]},
+
+{id:10,title:"Время и дни недели",icon:"📅",level:"A1",
+words:[
+  {cz:"pondělí / úterý",ru:"понедельник / вторник",ph:"[по́ндэли / у́тери]",ic:"📅"},
+  {cz:"středa / čtvrtek",ru:"среда / четверг",ph:"[стшэ́да / чтвртэк]",ic:"📅"},
+  {cz:"pátek / sobota / neděle",ru:"пятница / суббота / воскресенье",ph:"[па́тэк / со́бота / нэдьелэ]",ic:"📅"},
+  {cz:"ráno / poledne / večer",ru:"утро / полдень / вечер",ph:"[ра́но / по́лэднэ / вэ́чэр]",ic:"🌅🌆"},
+  {cz:"Kolik je hodin?",ru:"Который час?",ph:"[ко́лик йэ hо́дин?]",ic:"🕐"},
+  {cz:"Je půl druhé.",ru:"Половина второго.",ph:"[йэ пуул дру́hэ]",ic:"🕑"},
+  {cz:"dnes / zítra / včera",ru:"сегодня / завтра / вчера",ph:"[днэс / зи́тра / вчэ́ра]",ic:"📆"},
+  {cz:"týden / měsíc",ru:"неделя / месяц",ph:"[ти́ден / мне́сиц]",ic:"🗓️"}
+],
+dialogs:[
+  {who:"l",text:"Jaký je dnes den?",ph:"[яки́ йэ днэс ден?]",ru:"Какой сегодня день?"},
+  {who:"s",text:"Dnes je pondělí.",ph:"[днэс йэ по́ндэли]",ru:"Сегодня понедельник."},
+  {who:"l",text:"A kolik je hodin?",ph:"[а ко́лик йэ hо́дин?]",ru:"А который час?"},
+  {who:"s",text:"Je deset hodin ráno.",ph:"[йэ дэ́сет hо́дин ра́но]",ru:"Десять часов утра."},
+  {who:"l",text:"Dobře. Uvidíme se zítra!",ph:"[до́бже. увиди́мэ сэ зи́тра]",ru:"Хорошо. Увидимся завтра!"},
+  {who:"s",text:"Ano, na shledanou!",ph:"[а́но, на схледа́ноу]",ru:"Да, до свидания!"}
+],
+dialogs_olga:[
+  {who:"l",text:"Kdy máte čas?",ph:"",ru:"Когда у вас есть время?"},
+  {who:"o",text:"Ve středu odpoledne nebo v pátek ráno. V úterý a ve čtvrtek chodím do práce.",ph:"",ru:"В среду после обеда или в пятницу утром. По вторникам и четвергам хожу на работу."}
+],
+exercises:[
+  {q:"Как по-чешски «завтра»?",opts:["včera","dnes","zítra","ráno"],correct:2,ok:"Верно! zítra = завтра",no:"Нет. Завтра = zítra [зи́тра]"},
+  {q:"Что значит «pondělí»?",opts:["пятница","воскресенье","суббота","понедельник"],correct:3,ok:"Правильно! pondělí = понедельник",no:"Нет. pondělí = понедельник"}
+]},
+
+{id:11,title:"Погода и природа",icon:"🌤️",level:"A2",
+words:[
+  {cz:"Prší.",ru:"Идёт дождь.",ph:"[пр́ши]",ic:"🌧️"},
+  {cz:"Sněží.",ru:"Идёт снег.",ph:"[снэ́жи]",ic:"❄️"},
+  {cz:"Svítí slunce.",ru:"Светит солнце.",ph:"[сви́ти слу́нцэ]",ic:"☀️"},
+  {cz:"Fouká vítr.",ru:"Дует ветер.",ph:"[фоу́ка ви́тр]",ic:"💨"},
+  {cz:"Je teplo / chladno.",ru:"Тепло / Холодно.",ph:"[йэ тэ́пло / хла́дно]",ic:"🌡️"},
+  {cz:"zima / léto / jaro / podzim",ru:"зима / лето / весна / осень",ph:"[зи́ма / ле́то / я́ро / по́дзим]",ic:"🍂"},
+  {cz:"Jaké je dnes počasí?",ru:"Какая сегодня погода?",ph:"[яке́ йэ днэс по́часи?]",ic:"☁️"},
+  {cz:"krásně / hrozně",ru:"прекрасно / ужасно",ph:"[кра́снэ / hро́знэ]",ic:"😊😱"}
+],
+dialogs:[
+  {who:"l",text:"Jaké je dnes počasí, Světlano?",ph:"[яке́ йэ днэс по́часи?]",ru:"Какая сегодня погода, Светлана?"},
+  {who:"s",text:"Dnes prší. Je chladno.",ph:"[днэс пр́ши. йэ хла́дно]",ru:"Сегодня дождь. Холодно."},
+  {who:"l",text:"To je škoda. Máte deštník?",ph:"[то йэ шко́да. ма́тэ дэштни́к?]",ru:"Жалко. У вас есть зонтик?"},
+  {who:"s",text:"Ano, mám. Ale mám ráda déšť.",ph:"[а́но, маам. алэ маам ра́да де́шть]",ru:"Да, есть. Но я люблю дождь."},
+  {who:"l",text:"Opravdu? Já mám raději slunce.",ph:"[опра́вду? яа маам ра́дейи слу́нцэ]",ru:"Правда? Я предпочитаю солнце."}
+],
+dialogs_olga:[
+  {who:"l",text:"Jaké roční období máte nejraději?",ph:"",ru:"Какое время года вы любите больше всего?"},
+  {who:"o",text:"Nejraději mám jaro. Stromy kvetou a je příjemně teplo. Zima je moc dlouhá!",ph:"",ru:"Больше всего люблю весну. Деревья цветут и приятно тепло. Зима слишком длинная!"}
+],
+exercises:[
+  {q:"Как сказать «Идёт дождь»?",opts:["Sněží.","Svítí slunce.","Prší.","Je teplo."],correct:2,ok:"Верно! Prší = Идёт дождь",no:"Нет. Идёт дождь = Prší [пр́ши]"},
+  {q:"Что значит «Je teplo»?",opts:["Холодно","Дует ветер","Тепло","Идёт снег"],correct:2,ok:"Правильно! Je teplo = Тепло",no:"Нет. Je teplo = Тепло"}
+]},
+
+{id:12,title:"Здоровье и самочувствие",icon:"❤️",level:"A2",
+words:[
+  {cz:"Bolí mě hlava.",ru:"У меня болит голова.",ph:"[боли́ мнэ hла́ва]",ic:"🤕"},
+  {cz:"Jsem nemocná.",ru:"Я больна.",ph:"[йсэм нэмо́цна]",ic:"🤒"},
+  {cz:"Jsem unavená.",ru:"Я устала.",ph:"[йсэм унавэ́на]",ic:"😴"},
+  {cz:"lékař / doktor",ru:"врач / доктор",ph:"[ле́каш / до́ктор]",ic:"👨‍⚕️"},
+  {cz:"lékárna",ru:"аптека",ph:"[лека́рна]",ic:"💊"},
+  {cz:"léky / tablety",ru:"лекарства / таблетки",ph:"[ле́ки / та́блети]",ic:"💊"},
+  {cz:"Jak se cítíte?",ru:"Как вы себя чувствуете?",ph:"[як сэ ци́титэ?]",ic:"🩺"},
+  {cz:"Cítím se lépe.",ru:"Чувствую себя лучше.",ph:"[ци́тим сэ ле́пэ]",ic:"😊"}
+],
+dialogs:[
+  {who:"l",text:"Jak se cítíte dnes, Světlano?",ph:"[як сэ ци́титэ днэс?]",ru:"Как вы себя чувствуете сегодня, Светлана?"},
+  {who:"s",text:"Bohužel mi není dobře. Bolí mě hlava.",ph:"[боhу́жел ми нэни до́бже. боли́ мнэ hла́ва]",ru:"К сожалению, мне нехорошо. Болит голова."},
+  {who:"l",text:"To je škoda. Měla byste odpočívat.",ph:"[мнела бистэ отпочи́ват]",ru:"Жалко. Вам нужно отдохнуть."},
+  {who:"s",text:"Ano, a možná půjdu do lékárny.",ph:"[а́но, а мо́жна пуйду до лека́рни]",ru:"Да, и может быть схожу в аптеку."},
+  {who:"l",text:"Dobrý nápad. Uzdravte se!",ph:"[до́бри на́пад. уздра́втэ сэ!]",ru:"Хорошая идея. Выздоравливайте!"}
+],
+dialogs_olga:[
+  {who:"l",text:"Chodíte pravidelně k lékaři?",ph:"",ru:"Вы регулярно ходите к врачу?"},
+  {who:"o",text:"Ano, každý rok na preventivní prohlídku. Je důležité hlídat své zdraví, zvláště v mém věku.",ph:"",ru:"Да, каждый год на профилактический осмотр. Важно следить за здоровьем, особенно в моём возрасте."}
+],
+exercises:[
+  {q:"Как сказать «У меня болит голова»?",opts:["Jsem unavená.","Bolí mě hlava.","Jsem nemocná.","Cítím se lépe."],correct:1,ok:"Верно! Bolí mě hlava = болит голова",no:"Нет. Болит голова = Bolí mě hlava"},
+  {q:"Что значит «lékárna»?",opts:["больница","врач","аптека","таблетки"],correct:2,ok:"Правильно! lékárna = аптека",no:"Нет. lékárna = аптека [лека́рна]"}
+]},
+
+{id:13,title:"Внешность и характер",icon:"🪞",level:"A2",
+words:[
+  {cz:"hezký / hezká",ru:"красивый / красивая",ph:"[hэ́зки / hэ́зка]",ic:"😍"},
+  {cz:"vysoký / nízký",ru:"высокий / низкий",ph:"[висо́ки / ни́зки]",ic:"📏"},
+  {cz:"mladý / starý",ru:"молодой / старый",ph:"[мла́ди / ста́ри]",ic:"👶👴"},
+  {cz:"hodný / zlý",ru:"добрый / злой",ph:"[hо́дни / зли]",ic:"😊😠"},
+  {cz:"veselý / smutný",ru:"весёлый / грустный",ph:"[вэ́сэли / смутни́]",ic:"😄😢"},
+  {cz:"chytrý / moudrý",ru:"умный / мудрый",ph:"[хи́три / мо́удри]",ic:"🧠"},
+  {cz:"Vypadá...",ru:"Он/она выглядит...",ph:"[випада́]",ic:"👀"},
+  {cz:"Zdá se, že...",ru:"Кажется, что...",ph:"[зда́ сэ жэ]",ic:"🤔"}
+],
+dialogs:[
+  {who:"l",text:"Jak vypadá vaše sousedka?",ph:"[як випада́ вашэ соу́сэдка?]",ru:"Как выглядит ваша соседка?"},
+  {who:"s",text:"Je vysoká a má krátké tmavé vlasy.",ph:"[йэ висо́ка а ма кра́ткэ тма́вэ вла́си]",ru:"Она высокая, с короткими тёмными волосами."},
+  {who:"l",text:"A jaká je povahově?",ph:"[а яка́ йэ по́ваhовэ?]",ru:"А какой она характер?"},
+  {who:"s",text:"Je velmi hodná a veselá. Vždy se směje.",ph:"[йэ вельми hо́дна а вэ́сэла. вжди сэ смнэйэ]",ru:"Она очень добрая и весёлая. Всегда смеётся."},
+  {who:"l",text:"To zní příjemně!",ph:"[то зни́ пши́йемнэ]",ru:"Звучит приятно!"}
+],
+dialogs_olga:[
+  {who:"l",text:"Jak byste popsala svého manžela?",ph:"",ru:"Как бы вы описали своего мужа?"},
+  {who:"o",text:"Je klidný a trpělivý. Nikdy se nehněvá. Je to jeho největší přednost.",ph:"",ru:"Он спокойный и терпеливый. Никогда не злится. Это его главное достоинство."}
+],
+exercises:[
+  {q:"Как по-чешски «добрый»?",opts:["zlý","chytrý","hodný","veselý"],correct:2,ok:"Верно! hodný = добрый",no:"Нет. Добрый = hodný [hо́дни]"},
+  {q:"Что значит «veselý»?",opts:["грустный","сердитый","весёлый","умный"],correct:2,ok:"Правильно! veselý = весёлый",no:"Нет. veselý = весёлый [вэ́сэли]"}
+]},
+
+{id:14,title:"Взаимоотношения",icon:"🤝",level:"A2",
+words:[
+  {cz:"přítel / přítelkyně",ru:"друг / подруга",ph:"[пши́тел / пши́телкинэ]",ic:"👫"},
+  {cz:"soused / sousedka",ru:"сосед / соседка",ph:"[со́усэд / со́усэдка]",ic:"🏘️"},
+  {cz:"kolega / kolegyně",ru:"коллега (м/ж)",ph:"[ко́лэга / ко́лэгинэ]",ic:"👔"},
+  {cz:"Mám ji/ho ráda.",ru:"Она/он мне нравится.",ph:"[маам йи/hо ра́да]",ic:"❤️"},
+  {cz:"Vycházíme si vstříc.",ru:"Мы идём навстречу друг другу.",ph:"[вихази́мэ си встши́ц]",ic:"🤝"},
+  {cz:"Jsme dobří sousedé.",ru:"Мы хорошие соседи.",ph:"[йсмэ до́бжи со́усэдэ]",ic:"🏠"},
+  {cz:"Pomáháme si.",ru:"Мы помогаем друг другу.",ph:"[пома́hамэ си]",ic:"🙌"},
+  {cz:"Důvěřuji jí/mu.",ru:"Я доверяю ей/ему.",ph:"[ду́вэжуйи йи/му]",ic:"🔐"}
+],
+dialogs:[
+  {who:"l",text:"Máte tady přátele, Světlano?",ph:"[ма́тэ та́ди пша́тэлэ?]",ru:"У вас есть здесь друзья, Светлана?"},
+  {who:"s",text:"Ano, mám dobrou sousedku. Jmenuje se Jana.",ph:"[а́но, маам до́броу со́усэдку. ймэнуйэ сэ Я́на]",ru:"Да, у меня есть хорошая соседка. Её зовут Яна."},
+  {who:"l",text:"A vycházíte spolu dobře?",ph:"[а вихази́тэ спо́лу до́бже?]",ru:"Вы хорошо ладите?"},
+  {who:"s",text:"Ano! Mám ji moc ráda. Pomáháme si navzájem.",ph:"[маам йи моц ра́да. пома́hамэ си навза́йем]",ru:"Да! Она мне очень нравится. Мы помогаем друг другу."},
+  {who:"l",text:"To je krásné. Dobří sousedé jsou poklad.",ph:"[до́бжи со́усэдэ йсоу по́клад]",ru:"Это прекрасно. Хорошие соседи — это сокровище."}
+],
+dialogs_olga:[
+  {who:"l",text:"Jak důležitá jsou pro vás přátelství?",ph:"",ru:"Насколько важна для вас дружба?"},
+  {who:"o",text:"Velmi důležitá! Mám málo přátel, ale jsou to lidé, kterým zcela důvěřuji. Kvalita je důležitější než kvantita.",ph:"",ru:"Очень важна! У меня мало друзей, но это люди, которым я полностью доверяю. Качество важнее количества."}
+],
+exercises:[
+  {q:"Как сказать «Она мне нравится»?",opts:["Důvěřuji jí.","Pomáháme si.","Mám ji ráda.","Vycházíme si vstříc."],correct:2,ok:"Верно! Mám ji ráda = Она мне нравится",no:"Нет. Она мне нравится = Mám ji ráda"},
+  {q:"Что значит «soused»?",opts:["коллега","друг","сосед","родственник"],correct:2,ok:"Правильно! soused = сосед",no:"Нет. soused = сосед [со́усэд]"}
+]},
+
+{id:15,title:"Хорошее поведение",icon:"😇",level:"A2",
+words:[
+  {cz:"laskavý / laskavá",ru:"ласковый / добросердечный",ph:"[ла́скави]",ic:"💗"},
+  {cz:"slušný / slušná",ru:"вежливый / воспитанный",ph:"[слу́шни]",ic:"🎩"},
+  {cz:"upřímný",ru:"искренний",ph:"[у́пжимни]",ic:"💎"},
+  {cz:"trpělivý",ru:"терпеливый",ph:"[трпьели́ви]",ic:"⏳"},
+  {cz:"ochotný",ru:"охотно помогающий",ph:"[охо́тни]",ic:"🙋"},
+  {cz:"spolehlivý",ru:"надёжный",ph:"[спо́лэhливи]",ic:"🔒"},
+  {cz:"skromný",ru:"скромный",ph:"[скро́мни]",ic:"🌸"},
+  {cz:"Je velmi slušný člověk.",ru:"Он очень воспитанный человек.",ph:"[йэ вельми слу́шни чловьек]",ic:"👍"}
+],
+dialogs:[
+  {who:"l",text:"Co si myslíte o svém novém sousedovi?",ph:"[цо си мисли́тэ о свем но́вем со́усэдови?]",ru:"Что вы думаете о своём новом соседе?"},
+  {who:"s",text:"Je velmi laskavý a slušný. Vždy pozdraví a pomůže.",ph:"[йэ вельми ла́скави а слу́шни]",ru:"Он очень добросердечный и вежливый. Всегда поздоровается и поможет."},
+  {who:"l",text:"To je příjemné. Takových lidí je málo.",ph:"[та́ковиh лиди йэ ма́ло]",ru:"Это приятно. Таких людей мало."},
+  {who:"s",text:"Souhlasím. Je také velmi spolehlivý a upřímný.",ph:"[соу́hласим. йэ та́кэ вельми спо́лэhливи]",ru:"Согласна. Он также очень надёжный и искренний."},
+  {who:"l",text:"Výborně! Jak se jmenuje?",ph:"[як сэ ймэнуйэ?]",ru:"Замечательно! Как его зовут?"}
+],
+dialogs_olga:[
+  {who:"l",text:"Jaké vlastnosti si nejvíce ceníte u druhých?",ph:"",ru:"Какие качества вы больше всего цените в других?"},
+  {who:"o",text:"Upřímnost a spolehlivost. Člověk, který dodrží slovo a řekne pravdu, i když je to nepříjemné, je pro mě velmi cenný.",ph:"",ru:"Искренность и надёжность. Человек, который держит слово и говорит правду, даже когда это неприятно, очень ценен для меня."}
+],
+exercises:[
+  {q:"Как по-чешски «надёжный»?",opts:["laskavý","trpělivý","spolehlivý","slušný"],correct:2,ok:"Верно! spolehlivý = надёжный",no:"Нет. Надёжный = spolehlivý [спо́лэhливи]"},
+  {q:"Что значит «upřímný»?",opts:["вежливый","искренний","терпеливый","скромный"],correct:1,ok:"Правильно! upřímný = искренний",no:"Нет. upřímný = искренний"}
+]},
+
+{id:16,title:"Плохое поведение",icon:"😤",level:"A2",
+words:[
+  {cz:"hrubý / hrubá",ru:"грубый / грубая",ph:"[hру́би]",ic:"😠"},
+  {cz:"sobecký",ru:"эгоистичный",ph:"[со́бецки]",ic:"🙈"},
+  {cz:"závistivý",ru:"завистливый",ph:"[за́вистиви]",ic:"😒"},
+  {cz:"nepoctivý",ru:"нечестный",ph:"[нэпо́цтиви]",ic:"🤥"},
+  {cz:"drzý",ru:"наглый / дерзкий",ph:"[дрзи́]",ic:"😤"},
+  {cz:"Je mi to nepříjemné.",ru:"Это мне неприятно.",ph:"[йэ ми то нэпши́йемнэ]",ic:"😕"},
+  {cz:"To se nedělá.",ru:"Так не делается.",ph:"[то сэ нэдэ́ла]",ic:"🚫"},
+  {cz:"Vadí mi to.",ru:"Мне это мешает/раздражает.",ph:"[ва́ди ми то]",ic:"😣"}
+],
+dialogs:[
+  {who:"l",text:"Máte problémy s někým v sousedství?",ph:"[ма́тэ про́блеми с нье́ким?]",ru:"У вас есть проблемы с кем-то по соседству?"},
+  {who:"s",text:"Ano, jeden soused je bohužel velmi hrubý.",ph:"[е́ден со́усэд йэ боhу́жел вельми hру́би]",ru:"Да, один сосед, к сожалению, очень грубый."},
+  {who:"l",text:"To je nepříjemné. Co dělá?",ph:"[то йэ нэпши́йемнэ. цо дьела́?]",ru:"Это неприятно. Что он делает?"},
+  {who:"s",text:"Křičí a je drzý. Vadí mi to.",ph:"[кши́чи а йэ дрзи́. ва́ди ми то]",ru:"Кричит и дерзит. Мне это мешает."},
+  {who:"l",text:"Rozumím. Můžete mu říct: „To se nedělá!"",ph:"[мужэтэ му жи́цт: то сэ нэдэ́ла]",ru:"Понимаю. Можете ему сказать: «Так не делается!»"}
+],
+dialogs_olga:[
+  {who:"l",text:"Jak reagujete, když se někdo chová špatně?",ph:"",ru:"Как вы реагируете, когда кто-то ведёт себя плохо?"},
+  {who:"o",text:"Snažím se zachovat klid a říct mu to přímo, ale slušně. Křičet nebo hádat se nemá cenu. Ale sobeckost a nepoctivost tolerovat neumím.",ph:"",ru:"Стараюсь сохранять спокойствие и сказать прямо, но вежливо. Кричать или спорить не стоит. Но эгоизм и нечестность я терпеть не могу."}
+],
+exercises:[
+  {q:"Как сказать «Мне это мешает»?",opts:["To se nedělá.","Vadí mi to.","Je mi to nepříjemné.","Souhlasím."],correct:1,ok:"Верно! Vadí mi to = Мне это мешает/раздражает",no:"Нет. Мне мешает = Vadí mi to [ва́ди ми то]"},
+  {q:"Что значит «sobecký»?",opts:["грубый","завистливый","эгоистичный","наглый"],correct:2,ok:"Правильно! sobecký = эгоистичный",no:"Нет. sobecký = эгоистичный [со́бецки]"}
+]},
+
+{id:17,title:"Эмоции и чувства",icon:"💝",level:"A2",
+words:[
+  {cz:"Jsem šťastná.",ru:"Я счастлива.",ph:"[йсэм штьа́стна]",ic:"😊"},
+  {cz:"Jsem smutná.",ru:"Я грустная.",ph:"[йсэм смутна́]",ic:"😢"},
+  {cz:"Jsem naštvaná.",ru:"Я сердита/злюсь.",ph:"[йсэм наштвана́]",ic:"😠"},
+  {cz:"Stýská se mi po...",ru:"Я скучаю по...",ph:"[сти́ска сэ ми по]",ic:"💔"},
+  {cz:"Těší mě to.",ru:"Это меня радует.",ph:"[тэ́ши мнэ то]",ic:"🌟"},
+  {cz:"Bojím se.",ru:"Я боюсь.",ph:"[бойи́м сэ]",ic:"😨"},
+  {cz:"Jsem překvapená.",ru:"Я удивлена.",ph:"[йсэм пшэкваpэна́]",ic:"😲"},
+  {cz:"Cítím se skvěle!",ru:"Я чувствую себя отлично!",ph:"[ци́тим сэ сквьелэ]",ic:"🌈"}
+],
+dialogs:[
+  {who:"l",text:"Jak se dnes cítíte, Světlano?",ph:"[як сэ днэс ци́титэ?]",ru:"Как вы себя чувствуете сегодня, Светлана?"},
+  {who:"s",text:"Jsem trochu smutná. Stýská se mi po rodině v Rusku.",ph:"[йсэм тро́ху смутна́. сти́ска сэ ми по ро́динэ]",ru:"Я немного грустная. Скучаю по семье в России."},
+  {who:"l",text:"To chápu. Je to těžké být daleko od rodiny.",ph:"[то ха́пу. йэ то тэ́жкэ бит далэ́ко]",ru:"Понимаю. Тяжело быть далеко от семьи."},
+  {who:"s",text:"Ale tady mám nové přátele a líbí se mi Praha.",ph:"[алэ та́ди маам но́вэ пша́тэлэ]",ru:"Но здесь у меня новые друзья и мне нравится Прага."},
+  {who:"l",text:"Výborně! Pozitivní přístup je velmi důležitý.",ph:"[позити́вни пши́ступ йэ вельми дуулежи́ти]",ru:"Отлично! Позитивный настрой очень важен."}
+],
+dialogs_olga:[
+  {who:"l",text:"Co vás nejvíce těší v každodenním životě?",ph:"",ru:"Что вас больше всего радует в повседневной жизни?"},
+  {who:"o",text:"Ranní káva s knihou, procházka v parku a večerní telefon s dcerou. Malé věci, ale dělají mě šťastnou.",ph:"",ru:"Утренний кофе с книгой, прогулка в парке и вечерний звонок дочери. Мелочи, но они делают меня счастливой."}
+],
+exercises:[
+  {q:"Как сказать «Я счастлива»?",opts:["Jsem smutná.","Jsem naštvaná.","Jsem šťastná.","Bojím se."],correct:2,ok:"Верно! Jsem šťastná = Я счастлива",no:"Нет. Я счастлива = Jsem šťastná [йсэм штьа́стна]"},
+  {q:"Что значит «Stýská se mi po rodině»?",opts:["Я горжусь семьёй","Скучаю по семье","У меня есть семья","Я думаю о семье"],correct:1,ok:"Правильно! Stýská se mi = я скучаю",no:"Нет. Stýská se mi po = Я скучаю по..."}
+]},
+
+{id:18,title:"Конфликт и примирение",icon:"🕊️",level:"A2",
+words:[
+  {cz:"Promiňte.",ru:"Извините.",ph:"[про́миньтэ]",ic:"🙏"},
+  {cz:"Omlouvám se.",ru:"Прошу прощения.",ph:"[омлоу́ваам сэ]",ic:"😔"},
+  {cz:"Mrzí mě to.",ru:"Мне жаль / Сожалею.",ph:"[мрзи́ мнэ то]",ic:"💙"},
+  {cz:"Nebylo to v pořádku.",ru:"Это было нехорошо.",ph:"[нэби́ло то в по́жаадку]",ic:"❌"},
+  {cz:"Rozumím vám.",ru:"Я вас понимаю.",ph:"[ро́зумим ваам]",ic:"👂"},
+  {cz:"Odpustíte mi?",ru:"Вы меня простите?",ph:"[отпусти́тэ ми?]",ic:"❤️"},
+  {cz:"Usmíříme se.",ru:"Мы помиримся.",ph:"[усми́жимэ сэ]",ic:"🤝"},
+  {cz:"Je to za námi.",ru:"Это позади / Забудем.",ph:"[йэ то за на́ми]",ic:"✅"}
+],
+dialogs:[
+  {who:"l",text:"Světlano, co se stalo s vaší sousedkou?",ph:"[цо сэ ста́ло с вашей со́усэдкоу?]",ru:"Светлана, что случилось с вашей соседкой?"},
+  {who:"s",text:"Měly jsme malý spor. Mrzí mě to.",ph:"[мнели йсмэ ма́ли спор. мрзи́ мнэ то]",ru:"У нас был маленький спор. Мне жаль."},
+  {who:"l",text:"Mluvily jste spolu potom?",ph:"[млуви́ли йстэ спо́лу по́том?]",ru:"Вы потом разговаривали?"},
+  {who:"s",text:"Ano. Řekla jsem: „Omlouvám se, nebylo to v pořádku."",ph:"[жэкла йсэм: омлоу́ваам сэ]",ru:"Да. Я сказала: «Прошу прощения, это было нехорошо»."},
+  {who:"l",text:"A co odpověděla?",ph:"[а цо отповьедьела?]",ru:"И что она ответила?"},
+  {who:"s",text:"Řekla: „Je to za námi." Teď jsme zase dobré.",ph:"[йэ то за на́ми. тэдь йсмэ за́сэ до́брэ]",ru:"Сказала: «Это позади». Теперь мы снова хорошо."}
+],
+dialogs_olga:[
+  {who:"l",text:"Umíte se omluvit jako první?",ph:"",ru:"Умеете ли вы извиниться первой?"},
+  {who:"o",text:"To je těžké, ale ano. Myslím, že zdravý vztah je důležitější než mít pravdu. Omluvit se je projev síly, ne slabosti.",ph:"",ru:"Это трудно, но да. Думаю, что здоровые отношения важнее, чем быть правой. Извиниться — это признак силы, а не слабости."}
+],
+exercises:[
+  {q:"Как сказать «Прошу прощения»?",opts:["Mrzí mě to.","Omlouvám se.","Promiňte.","Rozumím vám."],correct:1,ok:"Верно! Omlouvám se = Прошу прощения (более формально)",no:"Нет. Прошу прощения = Omlouvám se [омлоу́ваам сэ]"},
+  {q:"Что значит «Je to za námi»?",opts:["Это впереди","Это рядом с нами","Это позади / Забудем","Это наше дело"],correct:2,ok:"Правильно! Je to za námi = Это позади, забудем",no:"Нет. Je to za námi = Это позади / Забудем"}
+]},
+
+{id:19,title:"Комплименты и критика",icon:"🌹",level:"A2",
+words:[
+  {cz:"Jste velmi milá!",ru:"Вы очень милая!",ph:"[йстэ вельми ми́ла]",ic:"😊"},
+  {cz:"To vám sluší.",ru:"Вам идёт.",ph:"[то ваам слу́ши]",ic:"👗"},
+  {cz:"Máte skvělý vkus.",ru:"У вас отличный вкус.",ph:"[ма́тэ сквьели вкус]",ic:"✨"},
+  {cz:"To nebylo hezké.",ru:"Это было нехорошо.",ph:"[то нэби́ло hэзке́]",ic:"😕"},
+  {cz:"Mohlo by to být lepší.",ru:"Это могло бы быть лучше.",ph:"[мо́hло би то бит лэ́пши]",ic:"💬"},
+  {cz:"Řeknu vám to upřímně.",ru:"Скажу вам откровенно.",ph:"[же́кну ваам то у́пжимнэ]",ic:"💬"},
+  {cz:"Líbí se mi, jak...",ru:"Мне нравится, как...",ph:"[ли́би сэ ми, як]",ic:"👍"},
+  {cz:"Příště to bude lepší.",ru:"В следующий раз будет лучше.",ph:"[пши́штэ то будэ лэ́пши]",ic:"⭐"}
+],
+dialogs:[
+  {who:"l",text:"Světlano, jak vám jde čeština?",ph:"[як ваам йдэ чэшти́на?]",ru:"Светлана, как у вас идёт чешский?"},
+  {who:"s",text:"Myslím, že pomalu, ale učím se každý den.",ph:"[мисли́м жэ по́малу, алэ учи́м сэ каждиден]",ru:"Думаю, что медленно, но учусь каждый день."},
+  {who:"l",text:"Musím říct: děláte velké pokroky! Jste velmi pilná.",ph:"[мусим жицт: дьела́тэ вэ́лке по́кроки]",ru:"Должна сказать: вы делаете большие успехи! Вы очень прилежная."},
+  {who:"s",text:"Děkuji! To je velmi hezké od vás.",ph:"[дэ́куйи! то йэ вельми hэзке́ од ваас]",ru:"Спасибо! Это очень мило с вашей стороны."},
+  {who:"l",text:"Jen jedno — výslovnost ř je stále trochu těžká.",ph:"[йен йэдно — ви́словност жэ йэ стал трохо тэ́жка]",ru:"Только одно — произношение «ř» ещё немного трудное."},
+  {who:"s",text:"Vím, cvičím to každý den! Příště to bude lepší.",ph:"[вим, цви́чим то. пши́штэ то будэ лэ́пши]",ru:"Знаю, тренирую каждый день! В следующий раз будет лучше."}
+],
+dialogs_olga:[
+  {who:"l",text:"Jak přijímáte kritiku?",ph:"",ru:"Как вы воспринимаете критику?"},
+  {who:"o",text:"Záleží na tom, jak je podána. Konstruktivní kritiku přijímám ráda — pomáhá mi růst. Ale hrubá nebo záštiplná kritika je jiná věc.",ph:"",ru:"Зависит от того, как она подаётся. Конструктивную критику принимаю с удовольствием — она помогает мне расти. Но грубая или злобная критика — другое дело."}
+],
+exercises:[
+  {q:"Как сделать комплимент «Вам идёт»?",opts:["Jste velmi milá!","To vám sluší.","Máte skvělý vkus.","Líbí se mi to."],correct:1,ok:"Верно! To vám sluší = Вам идёт",no:"Нет. Вам идёт = To vám sluší [то ваам слу́ши]"},
+  {q:"Что значит «Příště to bude lepší»?",opts:["Сейчас лучше","В прошлый раз было лучше","В следующий раз будет лучше","Это всегда лучше"],correct:2,ok:"Правильно! Příště = в следующий раз",no:"Нет. Příště = в следующий раз. Příště to bude lepší = В следующий раз будет лучше"}
+]},
+
+{id:20,title:"Итоговый диалог",icon:"🏆",level:"A2",
+words:[
+  {cz:"Naučila jsem se...",ru:"Я научилась...",ph:"[нау́чила йсэм сэ]",ic:"📚"},
+  {cz:"Mluvím trochu česky.",ru:"Я немного говорю по-чешски.",ph:"[млуви́м тро́ху чэ́ски]",ic:"🗣️"},
+  {cz:"Ještě se učím.",ru:"Я ещё учусь.",ph:"[йэштьэ сэ учи́м]",ic:"📖"},
+  {cz:"Rozumím vám.",ru:"Я вас понимаю.",ph:"[ро́зумим ваам]",ic:"👂"},
+  {cz:"Můžete mluvit pomaleji?",ru:"Можете говорить помедленнее?",ph:"[мужэтэ млуви́т по́малейи?]",ic:"🐢"},
+  {cz:"Jsem hrdá na sebe.",ru:"Я горжусь собой.",ph:"[йсэм hрда́ на сэ́бэ]",ic:"🌟"},
+  {cz:"Česky se mi líbí!",ru:"Чешский мне нравится!",ph:"[чэ́ски сэ ми ли́би]",ic:"❤️"},
+  {cz:"Budu pokračovat!",ru:"Буду продолжать!",ph:"[буду покрачо́ват]",ic:"💪"}
+],
+dialogs:[
+  {who:"l",text:"Světlano, dnes je váš dvacátý lekce! Gratuluju!",ph:"[двацати́ лэкцэ! гратулуйу!]",ru:"Светлана, сегодня ваш двадцатый урок! Поздравляю!"},
+  {who:"s",text:"Děkuji, Lucie! Jsem velmi ráda. Naučila jsem se mnoho.",ph:"[йсэм вельми ра́да. нау́чила йсэм сэ мно́hо]",ru:"Спасибо, Лючия! Я очень рада. Научилась многому."},
+  {who:"l",text:"Mluvíte teď mnohem lépe! Jak se cítíte?",ph:"[млуви́тэ тэдь мно́hем ле́пэ]",ru:"Вы теперь говорите намного лучше! Как вы себя чувствуете?"},
+  {who:"s",text:"Cítím se skvěle! Jsem hrdá na sebe. Česky se mi líbí!",ph:"[ци́тим сэ сквьелэ! йсэм hрда́ на сэ́бэ]",ru:"Чувствую себя отлично! Горжусь собой. Чешский мне нравится!"},
+  {who:"l",text:"Výborně! Zvládnete to! Co budete dělat dál?",ph:"[звла́днэтэ то! цо будэтэ дьела́т даал?]",ru:"Отлично! Вы справитесь! Что будете делать дальше?"},
+  {who:"s",text:"Budu pokračovat! Chci mluvit česky se sousedy a v obchodě.",ph:"[буду покрачо́ват! хци млуви́т чэ́ски]",ru:"Буду продолжать! Хочу говорить по-чешски с соседями и в магазине."},
+  {who:"l",text:"Perfektní! Jste úžasná studentka, Světlano!",ph:"[пэрфэктни́! йстэ у́жасна студэ́нтка]",ru:"Превосходно! Вы замечательная ученица, Светлана!"},
+  {who:"s",text:"A vy jste skvělá učitelka, Lucie! Moc děkuji!",ph:"[а ви йстэ сквьела́ учи́тэлка!]",ru:"А вы замечательная учительница, Лючия! Большое спасибо!"}
+],
+dialogs_olga:[
+  {who:"l",text:"Olgo, co poradíte Světlaně?",ph:"",ru:"Ольга, что вы посоветуете Светлане?"},
+  {who:"o",text:"Mluvte česky každý den, i když děláte chyby — to je normální! Dívejte se na české filmy s titulky a nebojte se ptát. Za rok budete překvapená, jak daleko jste pokročila!",ph:"",ru:"Говорите по-чешски каждый день, даже если делаете ошибки — это нормально! Смотрите чешские фильмы с субтитрами и не бойтесь спрашивать. Через год вы удивитесь, как далеко продвинулись!"}
+],
+exercises:[
+  {q:"Как сказать «Я горжусь собой»?",opts:["Jsem unavená.","Jsem hrdá na sebe.","Cítím se skvěle!","Budu pokračovat."],correct:1,ok:"Браво! Jsem hrdá na sebe = Я горжусь собой! 🌟",no:"Нет. Я горжусь собой = Jsem hrdá na sebe"},
+  {q:"Что значит «Budu pokračovat»?",opts:["Я начну снова","Буду продолжать","Я закончила","Буду учиться завтра"],correct:1,ok:"Отлично! Budu pokračovat = Буду продолжать! 💪",no:"Нет. Budu pokračovat = Буду продолжать"}
+]}
+];
+
+// ════════════════════════════════════════════
+// СОСТОЯНИЕ
+// ════════════════════════════════════════════
+let currentLesson = null;
+let currentSpeed = 0.8;
+let done = JSON.parse(localStorage.getItem('done')||'[]');
+
+// ════════════════════════════════════════════
+// ИНИЦИАЛИЗАЦИЯ
+// ════════════════════════════════════════════
+function init(){
+  buildMenu();
+  buildProgress();
+  updateTopbar('Выберите урок');
 }
 
-function speak(text, rate) {
-  if (!window.speechSynthesis) { alert('Голос не поддерживается в этом браузере'); return; }
+function buildMenu(){
+  const el = document.getElementById('lesson-menu');
+  el.innerHTML = LESSONS.map((l,i)=>{
+    const isDone = done.includes(l.id);
+    const isCur = !isDone && (i===0 || done.includes(LESSONS[i-1]?.id));
+    const cls = isDone?'done':isCur?'current':'';
+    const ic = isDone?'✅':isCur?l.icon:'🔒';
+    return `<button class="lm-btn ${cls}" onclick="openLesson(${l.id})" ${!isDone&&!isCur&&i>0&&!done.includes(LESSONS[i-1]?.id)?'disabled':''}>
+      <div class="lm-ic">${ic}</div>
+      <div class="lm-num">Урок ${l.id} · ${l.level}</div>
+      <div class="lm-name">${l.title}</div>
+    </button>`;
+  }).join('');
+}
+
+function buildProgress(){
+  document.getElementById('p-lessons').textContent = done.length;
+  document.getElementById('p-words').textContent = done.length * 8;
+  const el = document.getElementById('progress-lessons');
+  el.innerHTML = LESSONS.map(l=>{
+    const isDone = done.includes(l.id);
+    return `<div class="lrow">
+      <div class="lic">${isDone?'✅':l.icon}</div>
+      <div class="lnm">Урок ${l.id} — ${l.title}</div>
+      <span class="lbdg ${isDone?'bdg-ok':currentLesson?.id===l.id?'bdg-now':'bdg-lock'}">${isDone?'Готово':currentLesson?.id===l.id?'Сейчас':'Скоро'}</span>
+    </div>`;
+  }).join('');
+}
+
+// ════════════════════════════════════════════
+// ОТКРЫТЬ УРОК
+// ════════════════════════════════════════════
+function openLesson(id){
+  currentLesson = LESSONS.find(l=>l.id===id);
+  if(!currentLesson) return;
+  updateTopbar(`Урок ${id} · ${currentLesson.title} · ${currentLesson.level}`);
+  buildLessonContent();
+  buildWordsContent();
+  buildExercises();
+  showScreen('lesson', document.getElementById('nav-lesson'));
+}
+
+function buildLessonContent(){
+  const l = currentLesson;
+  const pct = Math.round((done.length/LESSONS.length)*100);
+  let html = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+    <div><div style="font-size:20px;font-weight:700;color:var(--txt)">${l.icon} ${l.title}</div>
+    <div style="font-size:13px;color:var(--txt2)">Урок ${l.id} из 20</div></div>
+    <span style="font-size:12px;background:var(--gl);color:var(--gd);padding:4px 10px;border-radius:12px;font-weight:700">${l.level}</span>
+  </div>
+  <div class="progress-wrap"><div class="progress-fill" style="width:${pct}%"></div></div>
+  <div class="tip"><span>💡</span><span>Нажмите ▶ у Лючии — услышите фразу. Нажмите «Говорю!» и произнесите вслух!</span></div>
+  <div class="dtabs">
+    <button class="dtab active" onclick="switchD('s',this)">👤 Я (Светлана)</button>
+    <button class="dtab o" onclick="switchD('o',this)">👩 Ольга A2</button>
+  </div>
+  <div id="d-s">${buildDialog(l.dialogs,'s')}</div>
+  <div id="d-o" style="display:none">
+    <div class="tip p"><span>👩</span><span>Ольга (A2) — смотрите, как тот же диалог звучит свободнее!</span></div>
+    ${buildDialog(l.dialogs_olga,'o')}
+  </div>
+  <button onclick="markDone(${l.id})" style="width:100%;margin-top:14px;padding:15px;background:var(--green);color:#fff;border:none;border-radius:var(--r);font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(29,158,117,.3)">
+    ✅ Урок пройден! Далее →
+  </button>`;
+  document.getElementById('lesson-content').innerHTML = html;
+}
+
+function buildDialog(dialogs, type){
+  return dialogs.map((d,i)=>{
+    const isL = d.who==='l';
+    const isS = d.who==='s';
+    const avaCls = isL?'al':isS?'as':'ao';
+    const buCls = isL?'l':isS?'s':'o';
+    const name = isL?'Лючия — учительница':isS?'Светлана — ваша очередь!':'Ольга (A2)';
+    const showRec = (isS || d.who==='o') && type!=='o';
+    const rid = `rec_${type}_${i}`;
+    return `<div class="arow">
+      <div class="ava ${avaCls}" onclick="speak('${esc(d.text)}',currentSpeed)">${isL?'Л':isS?'С':'О'}</div>
+      <div class="bbl ${buCls}">
+        <div class="bwho">${name}</div>
+        <div class="bcz">${d.text}</div>
+        ${d.ph?`<div class="bph">${d.ph}</div>`:''}
+        <div class="bru">${d.ru}</div>
+        <div class="crow">
+          <button class="pb" onclick="speak('${esc(d.text)}',currentSpeed)">▶</button>
+          ${isL?`<div class="sps" id="sp_${type}_${i}">
+            <button class="sp active" onclick="setSp(0.8,this,'sp_${type}_${i}')">0.8×</button>
+            <button class="sp" onclick="setSp(0.85,this,'sp_${type}_${i}')">0.85×</button>
+            <button class="sp" onclick="setSp(1,this,'sp_${type}_${i}')">1×</button>
+          </div>`:''}
+          ${isS?`<button class="rb" id="${rid}" onclick="toggleRec('${rid}')">🎤 Говорю!</button>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function buildWordsContent(){
+  const l = currentLesson;
+  document.getElementById('words-title').textContent = `Слова — ${l.title}`;
+  document.getElementById('words-grid').innerHTML = l.words.map(w=>`
+    <button class="wcard" onclick="speak('${esc(w.cz)}',0.8)">
+      <div class="wic">${w.ic}</div>
+      <div class="wcz">${w.cz}</div>
+      <div class="wru">${w.ru}</div>
+      <div class="wph">${w.ph}</div>
+    </button>`).join('');
+}
+
+function buildExercises(){
+  const l = currentLesson;
+  document.getElementById('exercises-content').innerHTML = l.exercises.map((ex,ei)=>`
+    <div class="card">
+      <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Задание ${ei+1} из ${l.exercises.length}</div>
+      <div class="exq">${ex.q}</div>
+      <div class="opts" id="ex${l.id}_${ei}">
+        ${ex.opts.map((o,oi)=>`<button class="opt" onclick="chk(${l.id},${ei},${oi},${ex.correct},'${esc(o)}')">${o}</button>`).join('')}
+      </div>
+      <div class="fb" id="fb${l.id}_${ei}"></div>
+    </div>`).join('');
+}
+
+// ════════════════════════════════════════════
+// ФУНКЦИИ
+// ════════════════════════════════════════════
+function showScreen(id, navEl){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  document.querySelectorAll('.nvi').forEach(b=>b.classList.remove('active'));
+  if(navEl) navEl.classList.add('active');
+  document.getElementById('main').scrollTop=0;
+}
+
+function speak(text, rate){
+  if(!window.speechSynthesis){alert('Голос не поддерживается');return;}
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'cs-CZ';
-  u.rate = rate || currentSpeed;
-  u.pitch = 1.05;
-  const voices = window.speechSynthesis.getVoices();
-  const cz = voices.find(v => v.lang && (v.lang === 'cs-CZ' || v.lang.startsWith('cs')));
-  if (cz) u.voice = cz;
+  u.lang='cs-CZ'; u.rate=rate||currentSpeed; u.pitch=1.05;
+  const v = window.speechSynthesis.getVoices().find(x=>x.lang&&x.lang.startsWith('cs'));
+  if(v) u.voice=v;
   window.speechSynthesis.speak(u);
 }
 
-function setSpeedAll(s, btn, groupId) {
-  currentSpeed = s;
-  document.getElementById(groupId).querySelectorAll('.sp').forEach(b => b.classList.remove('active'));
+function setSp(s,btn,gid){
+  currentSpeed=s;
+  document.getElementById(gid).querySelectorAll('.sp').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 }
 
-function setListenSp(s, btn) {
-  listenSpeed = s;
-  document.getElementById('sp-listen').querySelectorAll('.sp').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-function setListenSp2(s, btn) {
-  listenSpeed2 = s;
-  document.getElementById('sp-listen2').querySelectorAll('.sp').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-function playListen() {
-  speak(listenPhrase, listenSpeed);
-  const bars = document.querySelectorAll('.wbar');
-  let t = 0;
-  const id = setInterval(() => {
-    bars.forEach(b => b.style.height = (15 + Math.random() * 75) + '%');
-    if (++t > 18) { clearInterval(id); bars.forEach(b => b.style.height = '15%'); }
-  }, 160);
-}
-
-let recTimers = {};
-function toggleRec(btnId, phrase) {
-  const btn = btnId ? document.getElementById(btnId) : event.currentTarget;
-  if (!btn) return;
-  const isRec = btn.classList.contains('recording');
-  if (isRec) {
-    btn.classList.remove('recording');
-    btn.innerHTML = '🎤 Говорю!';
-    clearTimeout(recTimers[btnId]);
-  } else {
-    btn.classList.add('recording');
-    btn.innerHTML = '<span class="rec-dot"></span> Слушаю...';
-    recTimers[btnId] = setTimeout(() => {
-      btn.classList.remove('recording');
-      btn.innerHTML = '✅ Молодец! Ещё раз?';
-      setTimeout(() => { btn.innerHTML = '🎤 Говорю!'; }, 3000);
-    }, 3500);
+let recT={};
+function toggleRec(id){
+  const btn=document.getElementById(id);
+  if(!btn) return;
+  const rec=btn.classList.contains('rec');
+  if(rec){btn.classList.remove('rec');btn.innerHTML='🎤 Говорю!';clearTimeout(recT[id]);}
+  else{
+    btn.classList.add('rec');
+    btn.innerHTML='<span class="rdot"></span> Слушаю...';
+    recT[id]=setTimeout(()=>{
+      btn.classList.remove('rec');
+      btn.innerHTML='✅ Молодец! Ещё раз?';
+      setTimeout(()=>{if(btn)btn.innerHTML='🎤 Говорю!';},3000);
+    },3500);
   }
 }
 
-function switchDialog(who, tabEl) {
-  document.querySelectorAll('.dtab').forEach(b => b.classList.remove('active'));
+function switchD(who,tabEl){
+  document.querySelectorAll('.dtab').forEach(b=>b.classList.remove('active'));
   tabEl.classList.add('active');
-  document.getElementById('d-svetlana').style.display = who === 's' ? 'block' : 'none';
-  document.getElementById('d-olga').style.display = who === 'o' ? 'block' : 'none';
+  document.getElementById('d-s').style.display=who==='s'?'block':'none';
+  document.getElementById('d-o').style.display=who==='o'?'block':'none';
 }
 
-function chkEx(optsId, fbId, btn, correct) {
-  document.getElementById(optsId).querySelectorAll('.opt').forEach(b => { b.disabled = true; b.style.opacity = correct && b === btn ? '1' : (b === btn ? '1' : '0.5'); });
-  btn.classList.add(correct ? 'correct' : 'wrong');
-  const fb = document.getElementById(fbId);
-  fb.style.display = 'block';
-  if (correct) {
-    fb.className = 'feedback ok';
-    fb.innerHTML = '✅ Правильно! Отлично, Светлана!';
-    speak(btn.textContent.trim(), 0.85);
+function chk(lid,ei,oi,correct,txt){
+  const opts=document.getElementById(`ex${lid}_${ei}`);
+  opts.querySelectorAll('.opt').forEach((b,i)=>{b.disabled=true;if(i!==oi)b.style.opacity='.5';});
+  opts.querySelectorAll('.opt')[oi].classList.add(oi===correct?'ok':'no');
+  const fb=document.getElementById(`fb${lid}_${ei}`);
+  fb.style.display='block';
+  const ex=currentLesson.exercises[ei];
+  if(oi===correct){fb.className='fb ok';fb.innerHTML='✅ '+ex.ok;speak(txt,0.85);}
+  else{fb.className='fb no';fb.innerHTML='❌ '+ex.no;}
+}
+
+function markDone(id){
+  if(!done.includes(id)){done.push(id);localStorage.setItem('done',JSON.stringify(done));}
+  buildMenu();buildProgress();
+  const next=LESSONS.find(l=>!done.includes(l.id));
+  if(next){
+    if(confirm(`Урок ${id} пройден! 🎉\nПерейти к уроку ${next.id} — ${next.title}?`)){openLesson(next.id);}
+    else showScreen('home',document.querySelector('.nvi'));
   } else {
-    fb.className = 'feedback fail';
-    fb.innerHTML = '❌ Не совсем. Попробуйте ещё раз в следующий раз!';
+    alert('🏆 Поздравляем, Светлана! Все 20 уроков пройдены! Вы молодец!');
+    showScreen('progress',document.querySelector('.nvi:last-child'));
   }
 }
 
-function chkListen(btn, correct) {
-  document.getElementById('listen-opts').querySelectorAll('.opt').forEach(b => { b.disabled = true; });
-  btn.classList.add(correct ? 'correct' : 'wrong');
-  const fb = document.getElementById('listen-fb');
-  fb.style.display = 'block';
-  if (correct) {
-    fb.className = 'feedback ok';
-    fb.innerHTML = '✅ Правильно! «Dobrý den! Jak se jmenujete?»';
-  } else {
-    fb.className = 'feedback fail';
-    fb.innerHTML = '❌ Нет. Правильный ответ: «Добрый день! Как вас зовут?»';
-  }
-}
+function updateTopbar(txt){document.getElementById('tsub').textContent=txt;}
 
-function chkListen2(btn, correct) {
-  document.getElementById('listen-opts2').querySelectorAll('.opt').forEach(b => { b.disabled = true; });
-  btn.classList.add(correct ? 'correct' : 'wrong');
-  const fb = document.getElementById('listen-fb2');
-  fb.style.display = 'block';
-  if (correct) {
-    fb.className = 'feedback ok';
-    fb.innerHTML = '✅ Правильно! «Těší mě! Odkud jste?» — Приятно! Откуда вы?';
-  } else {
-    fb.className = 'feedback fail';
-    fb.innerHTML = '❌ Нет. «Těší mě! Odkud jste?» значит «Приятно! Откуда вы?»';
-  }
-}
+function esc(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;');}
 
-// Load voices
-window.speechSynthesis && window.speechSynthesis.getVoices();
-window.speechSynthesis && (window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices());
+window.speechSynthesis&&window.speechSynthesis.getVoices();
+window.speechSynthesis&&(window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices());
+window.onload=init;
 </script>
 </body>
 </html>
