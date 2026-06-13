@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1D9E75">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Čeština pro Světlanu</title>
+<style>
+:root {
+  --green: #1D9E75;
+  --green-dark: #0F6E56;
+  --green-light: #E1F5EE;
+  --purple: #7F77DD;
+  --purple-light: #EEEDFE;
+  --orange: #D85A30;
+  --orange-light: #FAECE7;
+  --amber: #EF9F27;
+  --bg: #F8F9FA;
+  --card: #FFFFFF;
+  --text: #1A1A1A;
+  --text2: #666;
+  --border: #E0E0E0;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; background: var(--bg); font-family: -apple-system, 'Roboto', sans-serif; }
+
+/* STATUS BAR PLACEHOLDER */
+.statusbar { height: env(safe-area-inset-top, 0px); background: var(--green-dark); }
+
+/* TOP BAR */
+.topbar {
+  background: linear-gradient(135deg, var(--green), var(--green-dark));
+  padding: 14px 16px 14px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.topbar-flag { font-size: 28px; line-height: 1; }
+.topbar-info { flex: 1; }
+.topbar-title { font-size: 19px; font-weight: 700; color: white; letter-spacing: -0.3px; }
+.topbar-sub { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 1px; }
+.streak { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 6px 12px; font-size: 14px; font-weight: 600; color: white; }
+
+/* BOTTOM NAV */
+.bottomnav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: white; border-top: 1px solid var(--border);
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  z-index: 100;
+}
+.nav-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  padding: 10px 4px 8px; cursor: pointer; transition: all 0.15s;
+  border: none; background: none;
+}
+.nav-icon { font-size: 22px; line-height: 1; }
+.nav-label { font-size: 11px; font-weight: 500; color: var(--text2); margin-top: 3px; }
+.nav-item.active .nav-label { color: var(--green); }
+.nav-item.active .nav-icon { transform: scale(1.15); }
+
+/* MAIN SCROLL AREA */
+.main {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  padding-top: calc(56px + env(safe-area-inset-top, 0px));
+}
+
+/* SCREENS */
+.screen { display: none; padding: 16px; }
+.screen.active { display: block; }
+
+/* CARDS */
+.card {
+  background: var(--card); border-radius: var(--radius);
+  border: 1px solid var(--border); padding: 16px; margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.section-title {
+  font-size: 13px; font-weight: 600; color: var(--text2);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  margin: 16px 0 10px;
+}
+
+/* PROGRESS BAR */
+.progress-wrap { background: #E8F5F1; border-radius: 6px; height: 8px; margin: 8px 0 14px; }
+.progress-fill { background: var(--green); height: 8px; border-radius: 6px; transition: width 0.5s ease; }
+
+/* DIALOG */
+.dialog-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+.dtab {
+  flex: 1; padding: 10px; border-radius: var(--radius-sm); font-size: 14px;
+  font-weight: 600; border: 2px solid var(--border); background: white;
+  cursor: pointer; transition: all 0.2s; text-align: center; color: var(--text2);
+}
+.dtab.active { border-color: var(--green); background: var(--green-light); color: var(--green-dark); }
+.dtab.olga-tab.active { border-color: var(--purple); background: var(--purple-light); color: #3C3489; }
+
+/* AVATAR ROW */
+.avatar-row { display: flex; gap: 12px; margin-bottom: 14px; align-items: flex-start; }
+.ava {
+  width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700; color: white;
+  flex-shrink: 0; cursor: pointer; user-select: none;
+}
+.ava-lucia { background: linear-gradient(135deg, #1D9E75, #0F6E56); }
+.ava-svetlana { background: linear-gradient(135deg, #D85A30, #993C1D); }
+.ava-olga { background: linear-gradient(135deg, #7F77DD, #534AB7); }
+
+.bubble {
+  flex: 1; background: white; border-radius: 0 14px 14px 14px;
+  border: 1px solid var(--border); padding: 12px 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.bubble.lucia { border-top-left-radius: 4px; border-left: 3px solid var(--green); }
+.bubble.svetlana { border-top-left-radius: 4px; border-left: 3px solid var(--orange); }
+.bubble.olga { border-top-left-radius: 4px; border-left: 3px solid var(--purple); }
+
+.bubble-who { font-size: 11px; font-weight: 700; color: var(--text2); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+.bubble-cz { font-size: 18px; font-weight: 600; color: var(--text); line-height: 1.4; }
+.bubble-ph { font-size: 13px; color: var(--green-dark); margin-top: 3px; font-style: italic; }
+.bubble-ru { font-size: 14px; color: var(--text2); margin-top: 4px; line-height: 1.4; }
+
+/* CONTROLS */
+.ctrl-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.play-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--green); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: white; flex-shrink: 0;
+  transition: transform 0.1s, background 0.15s;
+  box-shadow: 0 2px 6px rgba(29,158,117,0.3);
+}
+.play-btn:active { transform: scale(0.93); background: var(--green-dark); }
+.play-btn.big { width: 56px; height: 56px; font-size: 22px; }
+.play-btn.playing { background: var(--green-dark); }
+
+.speed-pills { display: flex; gap: 5px; }
+.sp {
+  padding: 6px 11px; border-radius: 20px; font-size: 13px; font-weight: 600;
+  border: 1.5px solid var(--border); background: white; color: var(--text2);
+  cursor: pointer; transition: all 0.15s;
+}
+.sp.active { background: var(--green); color: white; border-color: var(--green); }
+
+.rec-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 9px 16px; border-radius: 22px;
+  border: 1.5px solid var(--border); background: white;
+  font-size: 14px; font-weight: 600; color: var(--text2);
+  cursor: pointer; transition: all 0.2s;
+}
+.rec-btn.recording { background: var(--orange-light); border-color: var(--orange); color: var(--orange); }
+.rec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); animation: pulse 0.8s infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(0.7);opacity:0.5} }
+
+/* TIP BOX */
+.tip {
+  background: var(--green-light); border: 1px solid #9FE1CB;
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  font-size: 14px; color: #085041; line-height: 1.5;
+  display: flex; gap: 10px; align-items: flex-start; margin-bottom: 14px;
+}
+.tip.purple { background: var(--purple-light); border-color: #AFA9EC; color: #3C3489; }
+.tip-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+/* WORDS */
+.words-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.word-card {
+  background: white; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 14px 12px; cursor: pointer; transition: all 0.15s; text-align: left;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.word-card:active { transform: scale(0.97); background: var(--green-light); border-color: var(--green); }
+.wc-cz { font-size: 16px; font-weight: 700; color: var(--text); }
+.wc-ru { font-size: 13px; color: var(--text2); margin-top: 3px; }
+.wc-ph { font-size: 12px; color: var(--green-dark); margin-top: 2px; font-style: italic; }
+.wc-icon { font-size: 20px; margin-bottom: 6px; }
+
+/* EXERCISE */
+.ex-question {
+  font-size: 17px; color: var(--text); line-height: 1.5;
+  font-weight: 500; margin-bottom: 16px;
+}
+.ex-highlight { background: #FFF3CD; border-radius: 6px; padding: 2px 8px; font-weight: 700; }
+.options { display: flex; flex-direction: column; gap: 10px; }
+.opt {
+  padding: 15px 16px; border-radius: var(--radius-sm);
+  border: 2px solid var(--border); background: white;
+  font-size: 16px; color: var(--text); text-align: left;
+  cursor: pointer; transition: all 0.15s; line-height: 1.4;
+}
+.opt:active { transform: scale(0.98); }
+.opt.correct { background: var(--green-light); border-color: var(--green); color: var(--green-dark); font-weight: 600; }
+.opt.wrong { background: var(--orange-light); border-color: var(--orange); color: #993C1D; }
+.opt:disabled { cursor: default; }
+
+.feedback {
+  margin-top: 12px; padding: 12px 14px; border-radius: var(--radius-sm);
+  font-size: 15px; font-weight: 600; line-height: 1.4; display: none;
+}
+.feedback.ok { background: var(--green-light); color: var(--green-dark); border: 1px solid var(--green); }
+.feedback.fail { background: var(--orange-light); color: #993C1D; border: 1px solid var(--orange); }
+
+/* LISTEN SCREEN */
+.listen-player {
+  background: #F0FAF6; border-radius: var(--radius); padding: 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  border: 1px solid #9FE1CB; margin-bottom: 16px;
+}
+.waveform { display: flex; align-items: center; gap: 3px; height: 48px; }
+.wbar { width: 5px; background: var(--green); border-radius: 3px; height: 20%; transition: height 0.1s; }
+.listen-label { font-size: 14px; color: var(--text2); font-weight: 500; }
+
+/* PROGRESS SCREEN */
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.stat-card {
+  background: white; border-radius: var(--radius-sm); border: 1px solid var(--border);
+  padding: 14px 10px; text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.stat-num { font-size: 26px; font-weight: 700; color: var(--green); }
+.stat-num.purple { color: var(--purple); }
+.stat-num.amber { font-size: 22px; }
+.stat-lbl { font-size: 12px; color: var(--text2); margin-top: 3px; }
+
+.lesson-row {
+  display: flex; align-items: center; padding: 12px 0;
+  border-bottom: 1px solid var(--border); gap: 12px;
+}
+.lesson-row:last-child { border-bottom: none; }
+.lesson-icon { font-size: 22px; width: 36px; text-align: center; }
+.lesson-name { flex: 1; font-size: 15px; color: var(--text); font-weight: 500; }
+.lesson-badge {
+  padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;
+}
+.badge-done { background: var(--green-light); color: var(--green-dark); }
+.badge-now { background: #FFF3CD; color: #8B5A00; }
+.badge-lock { background: #F0F0F0; color: var(--text2); }
+
+.avatar-info-row { display: flex; gap: 12px; align-items: center; padding: 10px 0; }
+.ava-small { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: white; flex-shrink: 0; }
+.ava-name { font-size: 15px; font-weight: 600; color: var(--text); }
+.ava-desc { font-size: 13px; color: var(--text2); margin-top: 2px; }
+
+.screen-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.screen-sub { font-size: 14px; color: var(--text2); margin-bottom: 14px; }
+</style>
+</head>
+<body>
+
+<div class="statusbar"></div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-flag">🇨🇿</div>
+  <div class="topbar-info">
+    <div class="topbar-title">Čeština pro Světlanu</div>
+    <div class="topbar-sub" id="topbar-sub">Урок 3 · Приветствие · A1</div>
+  </div>
+  <div class="streak">🔥 5</div>
+</div>
+
+<!-- MAIN SCROLL -->
+<div class="main" id="main">
+
+  <!-- ══════════ ДИАЛОГ ══════════ -->
+  <div class="screen active" id="screen-dialog">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <div>
+        <div class="screen-title">Приветствие</div>
+        <div class="screen-sub">Урок 3 из 30</div>
+      </div>
+      <span style="font-size:12px;background:var(--green-light);color:var(--green-dark);padding:4px 10px;border-radius:12px;font-weight:700;">A1</span>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" style="width:40%"></div></div>
+
+    <div class="tip">
+      <span class="tip-icon">💡</span>
+      <span>Нажмите на кнопку ▶️ у Лючии — и услышите фразу медленно. Потом повторите вслух!</span>
+    </div>
+
+    <div class="dialog-tabs">
+      <button class="dtab active" onclick="switchDialog('s',this)">👤 Я (Светлана)</button>
+      <button class="dtab olga-tab" onclick="switchDialog('o',this)">👩 Ольга A2</button>
+    </div>
+
+    <!-- СВЕТЛАНА -->
+    <div id="d-svetlana">
+
+      <!-- 1 -->
+      <div class="avatar-row">
+        <div class="ava ava-lucia" onclick="speak('Dobrý den! Jak se jmenujete?',0.85)">Л</div>
+        <div class="bubble lucia">
+          <div class="bubble-who">Лючия — учительница</div>
+          <div class="bubble-cz">Dobrý den! Jak se jmenujete?</div>
+          <div class="bubble-ph">[до́бри дэн! як сэ ймэну́ете?]</div>
+          <div class="bubble-ru">Добрый день! Как вас зовут?</div>
+          <div class="ctrl-row">
+            <button class="play-btn" onclick="speak('Dobrý den! Jak se jmenujete?',currentSpeed)" title="Слушать">▶</button>
+            <div class="speed-pills" id="sp1">
+              <button class="sp active" onclick="setSpeedAll(0.8,this,'sp1')">0.8×</button>
+              <button class="sp" onclick="setSpeedAll(0.85,this,'sp1')">0.85×</button>
+              <button class="sp" onclick="setSpeedAll(1,this,'sp1')">1×</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="avatar-row">
+        <div class="ava ava-svetlana">С</div>
+        <div class="bubble svetlana">
+          <div class="bubble-who">Светлана — вы!</div>
+          <div class="bubble-cz">Dobrý den! Jmenuji se Světlana.</div>
+          <div class="bubble-ph">[до́бри дэн! ймэну́йи сэ Свэ́тлана]</div>
+          <div class="bubble-ru">Добрый день! Меня зовут Светлана.</div>
+          <div class="ctrl-row">
+            <button class="play-btn" onclick="speak('Dobrý den! Jmenuji se Světlana.',currentSpeed)">▶</button>
+            <button class="rec-btn" id="rec1" onclick="toggleRec('rec1','Dobrý den! Jmenuji se Světlana.')">🎤 Говорю!</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="avatar-row">
+        <div class="ava ava-lucia" onclick="speak('Těší mě, Světlano! Odkud jste?',0.85)">Л</div>
+        <div class="bubble lucia">
+          <div class="bubble-who">Лючия</div>
+          <div class="bubble-cz">Těší mě, Světlano! Odkud jste?</div>
+          <div class="bubble-ph">[тэ́ши мнэ, Свэ́тлано! о́ткуд йстэ?]</div>
+          <div class="bubble-ru">Приятно познакомиться, Светлана! Откуда вы?</div>
+          <div class="ctrl-row">
+            <button class="play-btn" onclick="speak('Těší mě, Světlano! Odkud jste?',currentSpeed)">▶</button>
+            <div class="speed-pills" id="sp2">
+              <button class="sp active" onclick="setSpeedAll(0.8,this,'sp2')">0.8×</button>
+              <button class="sp" onclick="setSpeedAll(0.85,this,'sp2')">0.85×</button>
+              <button class="sp" onclick="setSpeedAll(1,this,'sp2')">1×</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="avatar-row">
+        <div class="ava ava-svetlana">С</div>
+        <div class="bubble svetlana">
+          <div class="bubble-who">Светлана — ваша очередь!</div>
+          <div class="bubble-cz">Jsem z Ruska. Bydlím v Praze.</div>
+          <div class="bubble-ph">[йсэм с Ру́ска. бидли́м в Пра́зе]</div>
+          <div class="bubble-ru">Я из России. Живу в Праге.</div>
+          <div class="ctrl-row">
+            <button class="play-btn" onclick="speak('Jsem z Ruska. Bydlím v Praze.',currentSpeed)">▶</button>
+            <button class="rec-btn" onclick="toggleRec(null,'Jsem z Ruska. Bydlím v Praze.')">🎤 Говорю!</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="avatar-row">
+        <div class="ava ava-lucia">Л</div>
+        <div class="bubble lucia">
+          <div class="bubble-who">Лючия</div>
+          <div class="bubble-cz">Výborně! Na shledanou, Světlano!</div>
+          <div class="bubble-ph">[ви́борнэ! на схледа́ноу, Свэ́тлано!]</div>
+          <div class="bubble-ru">Отлично! До свидания, Светлана!</div>
+          <div class="ctrl-row">
+            <button class="play-btn" onclick="speak('Výborně! Na shledanou, Světlano!',currentSpeed)">▶</button>
+            <div class="speed-pills" id="sp3">
+              <button class="sp active" onclick="setSpeedAll(0.8,this,'sp3')">0.8×</button>
+              <button class="sp" onclick="setSpeedAll(0.85,this,'sp3')">0.85×</button>
+              <button class="sp" onclick="setSpeedAll(1,this,'sp3')">1×</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="avatar-row">
+        <div class="ava ava-svetlana">С</div>
+        <div class="bubble svetlana">
+          <div class="bubble-who">Светлана</div>
+          <div class="bubble-cz">Na shledanou! Děkuji!</div>
+          <div class="bubble-ph">[на схледа́ноу! дэ́куйи!]</div>
+          <div class="bubble-ru">До свидания! Спасибо!</div>
+          <div class="ctrl-row">
+            <button class="play-btn" onclick="speak('Na shledanou! Děkuji!',currentSpeed)">▶</button>
+            <button class="rec-btn" onclick="toggleRec(null,'Na shledanou! Děkuji!')">🎤 Говорю!</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- /d-svetlana -->
+
+    <!-- ОЛЬГА -->
+    <div id="d-olga" style="display:none">
+      <div class="tip purple">
+        <span class="tip-icon">👩</span>
+        <span>Ольга уже A2 — смотрите, как тот же диалог звучит свободнее. Через месяц вы тоже так сможете!</span>
+      </div>
+
+      <div class="avatar-row">
+        <div class="ava ava-lucia">Л</div>
+        <div class="bubble lucia">
+          <div class="bubble-who">Лючия</div>
+          <div class="bubble-cz">Dobrý den! Jak se jmenujete?</div>
+          <div class="bubble-ru">Добрый день! Как вас зовут?</div>
+          <div class="ctrl-row">
+            <button class="play-btn" onclick="speak('Dobrý den! Jak se jmenujete?',0.9)">▶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="avatar-row">
+        <div class="ava ava-olga">О</div>
+        <div class="bubble olga">
+          <div class="bubble-who">Ольга (A2)</div>
+          <div class="bubble-cz">Dobrý den! Jmenuji se Olga. A co vy?</div>
+          <div class="bubble-ru">Добрый день! Меня зовут Ольга. А вы?</div>
+          <div class="ctrl-row">
+            <button class="play-btn" onclick="speak('Dobrý den! Jmenuji se Olga. A co vy?',0.9)">▶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="avatar-row">
+        <div class="ava ava-lucia">Л</div>
+        <div class="bubble lucia">
+          <div class="bubble-who">Лючия</div>
+          <div class="bubble-cz">Těší mě, Olgo! Odkud jste?</div>
+          <div class="bubble-ru">Приятно, Ольга! Откуда вы?</div>
+          <div class="ctrl-row">
+            <button class="play-btn" onclick="speak('Těší mě, Olgo! Odkud jste?',0.9)">▶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="avatar-row">
+        <div class="ava ava-olga">О</div>
+        <div class="bubble olga">
+          <div class="bubble-who">Ольга</div>
+          <div class="bubble-cz">Jsem z Moskvy, ale teď bydlím tady v Praze. Mám ráda toto krásné město!</div>
+          <div class="bubble-ru">Я из Москвы, но сейчас живу здесь в Праге. Мне нравится этот красивый город!</div>
+          <div class="ctrl-row">
+            <button class="play-btn" onclick="speak('Jsem z Moskvy, ale teď bydlím tady v Praze. Mám ráda toto krásné město!',0.9)">▶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="avatar-row">
+        <div class="ava ava-lucia">Л</div>
+        <div class="bubble lucia">
+          <div class="bubble-who">Лючия</div>
+          <div class="bubble-cz">Výborně! Vaše čeština je moc hezká!</div>
+          <div class="bubble-ru">Отлично! Ваш чешский очень хорош!</div>
+          <div class="ctrl-row">
+            <button class="play-btn" onclick="speak('Výborně! Vaše čeština je moc hezká!',0.9)">▶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip purple">
+        <span class="tip-icon">⭐</span>
+        <span>Ольга добавила «A co vy?» (А вы?) и более длинный ответ. Это A2! Вы начинаете с A1 — это правильный путь.</span>
+      </div>
+    </div><!-- /d-olga -->
+  </div>
+
+  <!-- ══════════ СЛУШАНИЕ ══════════ -->
+  <div class="screen" id="screen-listen">
+    <div class="screen-title">Слушание</div>
+    <div class="screen-sub">Слушайте Лючию и выбирайте перевод</div>
+
+    <div class="card">
+      <div class="listen-player">
+        <div class="listen-label">Нажмите ▶ и слушайте Лючию</div>
+        <div class="waveform" id="waveform">
+          <div class="wbar"></div><div class="wbar"></div><div class="wbar"></div>
+          <div class="wbar"></div><div class="wbar"></div><div class="wbar"></div>
+          <div class="wbar"></div><div class="wbar"></div><div class="wbar"></div>
+          <div class="wbar"></div><div class="wbar"></div><div class="wbar"></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <button class="play-btn big" onclick="playListen()" id="listen-play-btn">▶</button>
+          <div class="speed-pills" id="sp-listen">
+            <button class="sp active" onclick="setListenSp(0.8,this)">0.8×</button>
+            <button class="sp" onclick="setListenSp(0.85,this)">0.85×</button>
+            <button class="sp" onclick="setListenSp(0.9,this)">0.9×</button>
+            <button class="sp" onclick="setListenSp(1,this)">1×</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:12px;">Что сказала Лючия?</div>
+      <div class="options" id="listen-opts">
+        <button class="opt" onclick="chkListen(this,false)">Как дела?</button>
+        <button class="opt" onclick="chkListen(this,true)">Добрый день! Как вас зовут?</button>
+        <button class="opt" onclick="chkListen(this,false)">До свидания!</button>
+        <button class="opt" onclick="chkListen(this,false)">Спасибо большое!</button>
+      </div>
+      <div class="feedback" id="listen-fb"></div>
+    </div>
+
+    <div class="card" style="margin-top:4px">
+      <div style="font-size:15px;font-weight:600;margin-bottom:10px;color:var(--text);">Следующая фраза</div>
+      <div class="listen-player">
+        <div class="listen-label">Слушайте снова</div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <button class="play-btn big" onclick="speak('Těší mě! Odkud jste?',listenSpeed)">▶</button>
+          <div class="speed-pills" id="sp-listen2">
+            <button class="sp active" onclick="setListenSp2(0.8,this)">0.8×</button>
+            <button class="sp" onclick="setListenSp2(0.9,this)">0.9×</button>
+            <button class="sp" onclick="setListenSp2(1,this)">1×</button>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:12px;">Что сказала Лючия?</div>
+      <div class="options" id="listen-opts2">
+        <button class="opt" onclick="chkListen2(this,false)">Откуда вы, красавица?</button>
+        <button class="opt" onclick="chkListen2(this,false)">Где вы живёте?</button>
+        <button class="opt" onclick="chkListen2(this,true)">Приятно! Откуда вы?</button>
+        <button class="opt" onclick="chkListen2(this,false)">Вы говорите по-чешски?</button>
+      </div>
+      <div class="feedback" id="listen-fb2"></div>
+    </div>
+  </div>
+
+  <!-- ══════════ СЛОВА ══════════ -->
+  <div class="screen" id="screen-words">
+    <div class="screen-title">Слова урока</div>
+    <div class="screen-sub">Нажмите на слово — Лючия произнесёт его медленно</div>
+
+    <div class="tip">
+      <span class="tip-icon">🔊</span>
+      <span>Нажмите и слушайте, потом повторяйте вслух несколько раз!</span>
+    </div>
+
+    <div class="words-grid">
+      <button class="word-card" onclick="speak('Dobrý den',0.8)">
+        <div class="wc-icon">☀️</div>
+        <div class="wc-cz">Dobrý den</div>
+        <div class="wc-ru">Добрый день</div>
+        <div class="wc-ph">[до́бри дэн]</div>
+      </button>
+      <button class="word-card" onclick="speak('Ahoj',0.8)">
+        <div class="wc-icon">👋</div>
+        <div class="wc-cz">Ahoj</div>
+        <div class="wc-ru">Привет</div>
+        <div class="wc-ph">[аhой]</div>
+      </button>
+      <button class="word-card" onclick="speak('Jak se jmenujete',0.8)">
+        <div class="wc-icon">❓</div>
+        <div class="wc-cz">Jak se jmenujete?</div>
+        <div class="wc-ru">Как вас зовут?</div>
+        <div class="wc-ph">[як сэ ймэну́ете]</div>
+      </button>
+      <button class="word-card" onclick="speak('Jmenuji se',0.8)">
+        <div class="wc-icon">🙋</div>
+        <div class="wc-cz">Jmenuji se...</div>
+        <div class="wc-ru">Меня зовут...</div>
+        <div class="wc-ph">[ймэну́йи сэ]</div>
+      </button>
+      <button class="word-card" onclick="speak('Těší mě',0.8)">
+        <div class="wc-icon">🤝</div>
+        <div class="wc-cz">Těší mě</div>
+        <div class="wc-ru">Приятно</div>
+        <div class="wc-ph">[тэ́ши мнэ]</div>
+      </button>
+      <button class="word-card" onclick="speak('Odkud jste',0.8)">
+        <div class="wc-icon">🗺️</div>
+        <div class="wc-cz">Odkud jste?</div>
+        <div class="wc-ru">Откуда вы?</div>
+        <div class="wc-ph">[о́ткуд йстэ]</div>
+      </button>
+      <button class="word-card" onclick="speak('Jsem z Ruska',0.8)">
+        <div class="wc-icon">🇷🇺</div>
+        <div class="wc-cz">Jsem z Ruska</div>
+        <div class="wc-ru">Я из России</div>
+        <div class="wc-ph">[йсэм с Ру́ска]</div>
+      </button>
+      <button class="word-card" onclick="speak('Bydlím v Praze',0.8)">
+        <div class="wc-icon">🏙️</div>
+        <div class="wc-cz">Bydlím v Praze</div>
+        <div class="wc-ru">Живу в Праге</div>
+        <div class="wc-ph">[бидли́м в Пра́зе]</div>
+      </button>
+      <button class="word-card" onclick="speak('Na shledanou',0.8)">
+        <div class="wc-icon">👋</div>
+        <div class="wc-cz">Na shledanou</div>
+        <div class="wc-ru">До свидания</div>
+        <div class="wc-ph">[на схледа́ноу]</div>
+      </button>
+      <button class="word-card" onclick="speak('Děkuji',0.8)">
+        <div class="wc-icon">🙏</div>
+        <div class="wc-cz">Děkuji</div>
+        <div class="wc-ru">Спасибо</div>
+        <div class="wc-ph">[дэ́куйи]</div>
+      </button>
+      <button class="word-card" onclick="speak('Prosím',0.8)">
+        <div class="wc-icon">😊</div>
+        <div class="wc-cz">Prosím</div>
+        <div class="wc-ru">Пожалуйста</div>
+        <div class="wc-ph">[про́сим]</div>
+      </button>
+      <button class="word-card" onclick="speak('Výborně',0.8)">
+        <div class="wc-icon">⭐</div>
+        <div class="wc-cz">Výborně!</div>
+        <div class="wc-ru">Отлично!</div>
+        <div class="wc-ph">[ви́борнэ]</div>
+      </button>
+    </div>
+
+    <div class="section-title" style="margin-top:20px">Тема следующего урока</div>
+    <div class="tip">
+      <span class="tip-icon">📅</span>
+      <span>Урок 4 — В кафе: «Prosím jedno kafe» (Один кофе, пожалуйста). Скоро!</span>
+    </div>
+  </div>
+
+  <!-- ══════════ ЗАДАНИЕ ══════════ -->
+  <div class="screen" id="screen-exercise">
+    <div class="screen-title">Задания</div>
+    <div class="screen-sub">Лёгкие вопросы — вы справитесь!</div>
+
+    <!-- Задание 1 -->
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Задание 1 из 4</div>
+      <div class="ex-question">Лючия говорит: <span class="ex-highlight">«Jak se jmenujete?»</span><br>Что вы отвечаете?</div>
+      <div class="options" id="ex1">
+        <button class="opt" onclick="chkEx('ex1','fb1',this,false)">Na shledanou!</button>
+        <button class="opt" onclick="chkEx('ex1','fb1',this,true)">Jmenuji se Světlana.</button>
+        <button class="opt" onclick="chkEx('ex1','fb1',this,false)">Děkuji!</button>
+        <button class="opt" onclick="chkEx('ex1','fb1',this,false)">Jsem z Prahy.</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+    </div>
+
+    <!-- Задание 2 -->
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Задание 2 из 4</div>
+      <div class="ex-question">Как по-чешски <span class="ex-highlight">«До свидания»</span>?</div>
+      <div class="options" id="ex2">
+        <button class="opt" onclick="chkEx('ex2','fb2',this,false)">Ahoj!</button>
+        <button class="opt" onclick="chkEx('ex2','fb2',this,false)">Dobrý den</button>
+        <button class="opt" onclick="chkEx('ex2','fb2',this,true)">Na shledanou</button>
+        <button class="opt" onclick="chkEx('ex2','fb2',this,false)">Děkuji</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+    </div>
+
+    <!-- Задание 3 -->
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Задание 3 из 4</div>
+      <div class="ex-question">Как ответить на вопрос <span class="ex-highlight">«Odkud jste?»</span> (Откуда вы?)</div>
+      <div class="options" id="ex3">
+        <button class="opt" onclick="chkEx('ex3','fb3',this,false)">Jmenuji se Světlana.</button>
+        <button class="opt" onclick="chkEx('ex3','fb3',this,true)">Jsem z Ruska.</button>
+        <button class="opt" onclick="chkEx('ex3','fb3',this,false)">Těší mě!</button>
+        <button class="opt" onclick="chkEx('ex3','fb3',this,false)">Výborně!</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+    </div>
+
+    <!-- Задание 4 -->
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Задание 4 из 4</div>
+      <div class="ex-question">Что значит <span class="ex-highlight">«Těší mě»</span>?</div>
+      <div class="options" id="ex4">
+        <button class="opt" onclick="chkEx('ex4','fb4',this,false)">Спасибо</button>
+        <button class="opt" onclick="chkEx('ex4','fb4',this,false)">Как дела?</button>
+        <button class="opt" onclick="chkEx('ex4','fb4',this,true)">Приятно познакомиться</button>
+        <button class="opt" onclick="chkEx('ex4','fb4',this,false)">Пожалуйста</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+    </div>
+  </div>
+
+  <!-- ══════════ ПРОГРЕСС ══════════ -->
+  <div class="screen" id="screen-progress">
+    <div class="screen-title">Мой прогресс</div>
+    <div class="screen-sub">Светлана, вы молодец! 🌟</div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-num">3</div>
+        <div class="stat-lbl">уроков</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num purple">24</div>
+        <div class="stat-lbl">слов</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num amber">🔥 5</div>
+        <div class="stat-lbl">дней подряд</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:2px;">📚 Уроки</div>
+      <div class="lesson-row">
+        <div class="lesson-icon">✅</div>
+        <div class="lesson-name">Урок 1 — Алфавит и звуки</div>
+        <span class="lesson-badge badge-done">Готово</span>
+      </div>
+      <div class="lesson-row">
+        <div class="lesson-icon">✅</div>
+        <div class="lesson-name">Урок 2 — Цифры 1–10</div>
+        <span class="lesson-badge badge-done">Готово</span>
+      </div>
+      <div class="lesson-row">
+        <div class="lesson-icon">▶️</div>
+        <div class="lesson-name">Урок 3 — Приветствие</div>
+        <span class="lesson-badge badge-now">Сейчас</span>
+      </div>
+      <div class="lesson-row" style="opacity:0.5">
+        <div class="lesson-icon">🔒</div>
+        <div class="lesson-name">Урок 4 — В кафе</div>
+        <span class="lesson-badge badge-lock">Скоро</span>
+      </div>
+      <div class="lesson-row" style="opacity:0.5">
+        <div class="lesson-icon">🔒</div>
+        <div class="lesson-name">Урок 5 — В магазине</div>
+        <span class="lesson-badge badge-lock">Скоро</span>
+      </div>
+      <div class="lesson-row" style="opacity:0.5">
+        <div class="lesson-icon">🔒</div>
+        <div class="lesson-name">Урок 6 — Транспорт</div>
+        <span class="lesson-badge badge-lock">Скоро</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:12px;">👩‍🏫 Ваша команда</div>
+      <div class="avatar-info-row">
+        <div class="ava-small" style="background:linear-gradient(135deg,#1D9E75,#0F6E56)">Л</div>
+        <div>
+          <div class="ava-name">Лючия</div>
+          <div class="ava-desc">Ваша учительница · Носитель языка · 45 лет</div>
+        </div>
+      </div>
+      <div style="width:100%;height:1px;background:var(--border);margin:4px 0"></div>
+      <div class="avatar-info-row">
+        <div class="ava-small" style="background:linear-gradient(135deg,#7F77DD,#534AB7)">О</div>
+        <div>
+          <div class="ava-name">Ольга</div>
+          <div class="ava-desc">Подруга по учёбе · Уровень A2 · Пример для вас</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip">
+      <span class="tip-icon">🌟</span>
+      <span>Отличный старт! Занимайтесь 15 минут каждый день — и через 2 месяца вы будете свободно общаться в магазине и кафе!</span>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- BOTTOM NAV -->
+<div class="bottomnav">
+  <button class="nav-item active" onclick="showScreen('dialog',this)">
+    <span class="nav-icon">💬</span>
+    <span class="nav-label">Диалог</span>
+  </button>
+  <button class="nav-item" onclick="showScreen('listen',this)">
+    <span class="nav-icon">🎧</span>
+    <span class="nav-label">Слушание</span>
+  </button>
+  <button class="nav-item" onclick="showScreen('words',this)">
+    <span class="nav-icon">📖</span>
+    <span class="nav-label">Слова</span>
+  </button>
+  <button class="nav-item" onclick="showScreen('exercise',this)">
+    <span class="nav-icon">✏️</span>
+    <span class="nav-label">Задание</span>
+  </button>
+  <button class="nav-item" onclick="showScreen('progress',this)">
+    <span class="nav-icon">📊</span>
+    <span class="nav-label">Прогресс</span>
+  </button>
+</div>
+
+<script>
+let currentSpeed = 0.8;
+let listenSpeed = 0.8;
+let listenSpeed2 = 0.8;
+const listenPhrase = 'Dobrý den! Jak se jmenujete?';
+
+function showScreen(id, navEl) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  if (navEl) navEl.classList.add('active');
+  document.getElementById('main').scrollTop = 0;
+}
+
+function speak(text, rate) {
+  if (!window.speechSynthesis) { alert('Голос не поддерживается в этом браузере'); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'cs-CZ';
+  u.rate = rate || currentSpeed;
+  u.pitch = 1.05;
+  const voices = window.speechSynthesis.getVoices();
+  const cz = voices.find(v => v.lang && (v.lang === 'cs-CZ' || v.lang.startsWith('cs')));
+  if (cz) u.voice = cz;
+  window.speechSynthesis.speak(u);
+}
+
+function setSpeedAll(s, btn, groupId) {
+  currentSpeed = s;
+  document.getElementById(groupId).querySelectorAll('.sp').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function setListenSp(s, btn) {
+  listenSpeed = s;
+  document.getElementById('sp-listen').querySelectorAll('.sp').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function setListenSp2(s, btn) {
+  listenSpeed2 = s;
+  document.getElementById('sp-listen2').querySelectorAll('.sp').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function playListen() {
+  speak(listenPhrase, listenSpeed);
+  const bars = document.querySelectorAll('.wbar');
+  let t = 0;
+  const id = setInterval(() => {
+    bars.forEach(b => b.style.height = (15 + Math.random() * 75) + '%');
+    if (++t > 18) { clearInterval(id); bars.forEach(b => b.style.height = '15%'); }
+  }, 160);
+}
+
+let recTimers = {};
+function toggleRec(btnId, phrase) {
+  const btn = btnId ? document.getElementById(btnId) : event.currentTarget;
+  if (!btn) return;
+  const isRec = btn.classList.contains('recording');
+  if (isRec) {
+    btn.classList.remove('recording');
+    btn.innerHTML = '🎤 Говорю!';
+    clearTimeout(recTimers[btnId]);
+  } else {
+    btn.classList.add('recording');
+    btn.innerHTML = '<span class="rec-dot"></span> Слушаю...';
+    recTimers[btnId] = setTimeout(() => {
+      btn.classList.remove('recording');
+      btn.innerHTML = '✅ Молодец! Ещё раз?';
+      setTimeout(() => { btn.innerHTML = '🎤 Говорю!'; }, 3000);
+    }, 3500);
+  }
+}
+
+function switchDialog(who, tabEl) {
+  document.querySelectorAll('.dtab').forEach(b => b.classList.remove('active'));
+  tabEl.classList.add('active');
+  document.getElementById('d-svetlana').style.display = who === 's' ? 'block' : 'none';
+  document.getElementById('d-olga').style.display = who === 'o' ? 'block' : 'none';
+}
+
+function chkEx(optsId, fbId, btn, correct) {
+  document.getElementById(optsId).querySelectorAll('.opt').forEach(b => { b.disabled = true; b.style.opacity = correct && b === btn ? '1' : (b === btn ? '1' : '0.5'); });
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  const fb = document.getElementById(fbId);
+  fb.style.display = 'block';
+  if (correct) {
+    fb.className = 'feedback ok';
+    fb.innerHTML = '✅ Правильно! Отлично, Светлана!';
+    speak(btn.textContent.trim(), 0.85);
+  } else {
+    fb.className = 'feedback fail';
+    fb.innerHTML = '❌ Не совсем. Попробуйте ещё раз в следующий раз!';
+  }
+}
+
+function chkListen(btn, correct) {
+  document.getElementById('listen-opts').querySelectorAll('.opt').forEach(b => { b.disabled = true; });
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  const fb = document.getElementById('listen-fb');
+  fb.style.display = 'block';
+  if (correct) {
+    fb.className = 'feedback ok';
+    fb.innerHTML = '✅ Правильно! «Dobrý den! Jak se jmenujete?»';
+  } else {
+    fb.className = 'feedback fail';
+    fb.innerHTML = '❌ Нет. Правильный ответ: «Добрый день! Как вас зовут?»';
+  }
+}
+
+function chkListen2(btn, correct) {
+  document.getElementById('listen-opts2').querySelectorAll('.opt').forEach(b => { b.disabled = true; });
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  const fb = document.getElementById('listen-fb2');
+  fb.style.display = 'block';
+  if (correct) {
+    fb.className = 'feedback ok';
+    fb.innerHTML = '✅ Правильно! «Těší mě! Odkud jste?» — Приятно! Откуда вы?';
+  } else {
+    fb.className = 'feedback fail';
+    fb.innerHTML = '❌ Нет. «Těší mě! Odkud jste?» значит «Приятно! Откуда вы?»';
+  }
+}
+
+// Load voices
+window.speechSynthesis && window.speechSynthesis.getVoices();
+window.speechSynthesis && (window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices());
+</script>
+</body>
+</html>
